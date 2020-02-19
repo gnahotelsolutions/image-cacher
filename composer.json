@@ -1,0 +1,44 @@
+{
+    "name": "gnahotelsolutions/image-cacher",
+    "description": "Creates a resized or cropped version of the image in the cache directory",
+    "keywords": [
+        "gnahotelsolutions",
+        "image-cacher",
+        "image",
+        "manipulation"
+    ],
+    "homepage": "https://github.com/gnahotelsolutions/image-cacher",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "David Llop",
+            "email": "dllop@gnahs.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "GNAHotelSolutions\\ImageCacher\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "GNAHotelSolutions\\ImageCacher\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

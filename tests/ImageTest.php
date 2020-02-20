@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 class ImageTest extends TestCase
 {
+    const IMAGE_ROOT_PATH = __DIR__.'/fixtures/images';
+
     /** @test */
     public function not_existing_image_throws_exception()
     {
@@ -20,7 +22,7 @@ class ImageTest extends TestCase
     /** @test */
     public function can_extract_all_the_information()
     {
-        $image = new Image('office/meetings_room/plant.jpg', 'tests/fixtures');
+        $image = new Image('office/meetings_room/plant.jpg', self::IMAGE_ROOT_PATH);
 
         $this->assertEquals('office/meetings_room', $image->getPath());
         $this->assertEquals('plant.jpg', $image->getName());
@@ -28,13 +30,14 @@ class ImageTest extends TestCase
         $this->assertEquals(810, $image->getHeight());
         $this->assertEquals('jpeg', $image->getType());
         $this->assertEquals(1.33, $image->getAspectRatio());
-        $this->assertEquals('tests/fixtures/office/meetings_room/plant.jpg', $image->getOriginalFullPath());
+        $this->assertEquals(self::IMAGE_ROOT_PATH.'/office/meetings_room/plant.jpg', $image->getOriginalFullPath());
+        $this->assertEquals('office/meetings_room/plant.jpg', $image->getOriginalName());
     }
 
     /** @test */
     public function can_determine_if_image_is_smaller_than()
     {
-        $image = new Image('office/meetings_room/plant.jpg', 'tests/fixtures');
+        $image = new Image('office/meetings_room/plant.jpg', self::IMAGE_ROOT_PATH);
 
         $this->assertTrue($image->isSmallerThan(1081, 812)); // Both greater
         $this->assertTrue($image->isSmallerThan(1080, 810)); // Both equal

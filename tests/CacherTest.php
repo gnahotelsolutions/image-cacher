@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 class CacherTest extends TestCase
 {
+    use CacheFolder;
+
     const CACHE_PATH = 'cache';
     const CACHE_ROOT_PATH = __DIR__.'/fixtures';
     const IMAGES_ROOT_PATH = __DIR__.'/fixtures/images';
@@ -16,7 +18,7 @@ class CacherTest extends TestCase
     {
         parent::setUp();
 
-        @mkdir(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH);
+        $this->createFolder(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH);
     }
 
     public function tearDown(): void
@@ -98,23 +100,6 @@ class CacherTest extends TestCase
 
         $this->assertFileExists(self::CACHE_ROOT_PATH.'/v2/'.self::CACHE_PATH.'/office/meetings_room/200x200/plant.jpg');
 
-        $this->deleteFolder(self::CACHE_ROOT_PATH.'/v2/'.self::CACHE_PATH);
-    }
-
-    private function deleteFolder(string $path): void
-    {
-        foreach (scandir($path) as $file) {
-            if ($file === '.' || $file === '..') {
-                continue;
-            }
-
-            if (is_dir("{$path}/{$file}")) {
-                $this->deleteFolder("{$path}/{$file}");
-            } else {
-                unlink("{$path}/{$file}");
-            }
-        }
-
-        rmdir($path);
+        $this->deleteFolder(self::CACHE_ROOT_PATH.'/v2');
     }
 }

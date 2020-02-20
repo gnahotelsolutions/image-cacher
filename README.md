@@ -38,10 +38,10 @@ $cacher = new Cacher();
 $image = new Image('hotel/rooms/double-room.jpg', 'img'); 
 ?>
 
-<img src="<?= $cacher->crop($image, 200, 200)->getOriginalFullPath(); ?>" class="thumbnail">
+<img src="<?= $cacher->crop($image, 200, 200)->getOriginalName(); ?>" class="thumbnail">
 ```
 
-### Combining with srcset
+### Combining with srcset attribute
 
 ```php
 <?php 
@@ -49,9 +49,9 @@ $cacher = new Cacher();
 $image = new Image('hotel/rooms/double-room.jpg', 'img'); 
 ?>
 
-<img src="<?= $cacher->crop($image, 800, 600)->getOriginalFullPath(); ?>"
-     srcset="<?= $cacher->crop($image, 400, 280)->getOriginalFullPath(); ?> 400w,
-             <?= $cacher->crop($image, 800, 600)->getOriginalFullPath(); ?> 800w"
+<img src="<?= $cacher->crop($image, 800, 600)->getOriginalName(); ?>"
+     srcset="<?= $cacher->crop($image, 400, 280)->getOriginalName(); ?> 400w,
+             <?= $cacher->crop($image, 800, 600)->getOriginalName(); ?> 800w"
      sizes="(max-width: 480px) 400px), 800px"
 >
 ```
@@ -60,8 +60,16 @@ $image = new Image('hotel/rooms/double-room.jpg', 'img');
 
 The package comes with a Facade you can use on your Laravel projects. Use the configuration file to tell where the cache path and the images root path are.
 
+First of all, publish the package configuration file:
+
+```
+php artisan vendor:publish --provider="GNAHotelSolutions\ImageCacher\Adapters\Laravel\ImageCacherServiceProvider"
+```
+
+Adapt the `config/image-cacher.php` file variables to your needs. Default ones works well with a standard Laravel app.
+
 ```php
-<img src="{{ ImageCacher::crop('hotel/rooms/double-room.jpg', 800, 600)->getOriginalFullPath() }}">
+<img src="{{ ImageCacher::crop('hotel/rooms/double-room.jpg', 800, 600)->getOriginalName() }}">
 ```
 
 ### Testing

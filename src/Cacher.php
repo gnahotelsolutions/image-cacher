@@ -31,7 +31,7 @@ class Cacher
         if (is_string($image)) {
             $image = new Image($image, $this->imagesRootPath);
         }
-        
+
         if ($this->isSmallerThanRequested($image, $width, $height)) {
             return $image;
         }

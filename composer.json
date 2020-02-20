@@ -38,6 +38,16 @@
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
 
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "GNAHotelSolutions\\ImageCacher\\Adapters\\Laravel\\ImageCacherServiceProvider"
+            ],
+            "aliases": {
+                "ImageCacher": "GNAHotelSolutions\\ImageCacher\\Adapters\\Laravel\\Facades\\ImageCacher"
+            }
+        }
+    },
     "config": {
         "sort-packages": true
     }

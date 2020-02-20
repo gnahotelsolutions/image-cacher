@@ -56,6 +56,14 @@ $image = new Image('hotel/rooms/double-room.jpg', 'img');
 >
 ```
 
+### Using with Laravel
+
+The package comes with a Facade you can use on your Laravel projects. Use the configuration file to tell where the cache path and the images root path are.
+
+```php
+<img src="{{ ImageCacher::crop('hotel/rooms/double-room.jpg', 800, 600)->getOriginalFullPath() }}">
+```
+
 ### Testing
 
 ``` bash

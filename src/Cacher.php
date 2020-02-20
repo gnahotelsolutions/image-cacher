@@ -103,7 +103,7 @@ class Cacher
 
     protected function getCacheImagePath(string $path, $width, $height): string
     {
-        return "{$path}/{$width}x{$height}";
+        return ltrim("{$path}/{$width}x{$height}", '/');
     }
 
     protected function isAlpha(Image $image): bool
@@ -164,7 +164,11 @@ class Cacher
 
     protected function createCacheDirectoryIfNotExists(Image $image, $width, $height): void
     {
-        $cachePath = ltrim("{$this->cacheRootPath}/{$this->cachePath}/{$this->getCacheImagePath($image->getPath(), $width, $height)}", '/');
+        $cachePath = "{$this->cacheRootPath}/{$this->cachePath}/{$this->getCacheImagePath($image->getPath(), $width, $height)}";
+
+        if (substr($cachePath, 0, 1) !== '') {
+            $cachePath = "/{$cachePath}";
+        }
 
         if (! file_exists($cachePath)) {
             mkdir($cachePath, 0777, true);

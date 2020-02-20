@@ -1,6 +1,6 @@
 <?php
 
-namespace GNAHotelSolutions\ImageCacher\Adapters\Laravel;
+namespace GNAHotelSolutions\ImageCacher\Adapters\Laravel\Facades;
 
 use GNAHotelSolutions\ImageCacher\Cacher;
 use Illuminate\Support\Facades\Facade;

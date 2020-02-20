@@ -5,15 +5,19 @@ namespace GNAHotelSolutions\ImageCacher;
 class Cacher
 {
     /** @var string  */
-    protected $cacheDirectory;
+    protected $cachePath;
+    
+    /** @var string  */
+    protected $cacheRootPath;
 
     /** @var string */
     protected $imagesRootPath;
 
-    public function __construct(string $cacheDirectory = 'cache/images', string $imagesRootPath = '')
+    public function __construct(string $cachePath = 'cache/images', string $cacheRootPath = '', string $imagesRootPath = '')
     {
-        $this->cacheDirectory = $cacheDirectory;
-        $this->imagesRootPath = $imagesRootPath;
+        $this->cachePath = $cachePath;
+        $this->cacheRootPath = rtrim($cacheRootPath, '/');
+        $this->imagesRootPath = rtrim($imagesRootPath, '/');
     }
 
     public function resize($image, $width = null, $height = null): Image
@@ -40,7 +44,7 @@ class Cacher
         $resizedHeight = $height ?? round($width / $image->getAspectRatio());
 
         if ($this->isAlreadyCached($image, $resizedWidth, $resizedHeight)) {
-            return new Image($this->getCachedImageName($image, $resizedWidth, $resizedHeight), $this->cacheDirectory);
+            return new Image($this->getCachedImagePathName($image, $resizedWidth, $resizedHeight), $this->cacheRootPath);
         }
 
         $layout = imagecreatetruecolor($resizedWidth, $resizedHeight);
@@ -65,7 +69,7 @@ class Cacher
 
         $this->saveImage($image, $layout, $resizedWidth, $resizedHeight);
 
-        return new Image($this->getCachedImageName($image, $resizedWidth, $resizedHeight), $this->cacheDirectory);
+        return new Image($this->getCachedImagePathName($image, $resizedWidth, $resizedHeight), $this->cacheRootPath);
     }
 
     protected function isSmallerThanRequested(Image $image, $width, $height): bool
@@ -80,7 +84,16 @@ class Cacher
 
     protected function getCachedImageFullName(Image $image, $width, $height): string
     {
-        return "{$this->cacheDirectory}/{$this->getCachedImageName($image, $width, $height)}";
+        if ($this->cacheRootPath === '') {
+            return $this->getCachedImagePathName($image, $width, $height);
+        }
+
+        return "{$this->cacheRootPath}/{$this->getCachedImagePathName($image, $width, $height)}";
+    }
+
+    protected function getCachedImagePathName(Image $image, $width, $height): string
+    {
+        return "{$this->cachePath}/{$this->getCachedImageName($image, $width, $height)}";
     }
 
     protected function getCachedImageName(Image $image, $width, $height): string
@@ -151,7 +164,7 @@ class Cacher
 
     protected function createCacheDirectoryIfNotExists(Image $image, $width, $height): void
     {
-        $cachePath = "{$this->cacheDirectory}/{$this->getCacheImagePath($image->getPath(), $width, $height)}";
+        $cachePath = ltrim("{$this->cacheRootPath}/{$this->cachePath}/{$this->getCacheImagePath($image->getPath(), $width, $height)}", '/');
 
         if (! file_exists($cachePath)) {
             mkdir($cachePath, 0777, true);

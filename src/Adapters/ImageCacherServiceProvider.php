@@ -12,7 +12,11 @@ class ImageCacherServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/config/image-cacher.php', 'image-cacher');
 
         $this->app->singleton(Cacher::class, function () {
-            return new Cacher(config('image-cacher.cache_path'), config('image-cacher.images_root_path')); 
+            return new Cacher(
+                config('image-cacher.cache_path'), 
+                config('image-cacher.cache_root_path'), 
+                config('image-cacher.images_root_path')
+            ); 
         });
     }
 

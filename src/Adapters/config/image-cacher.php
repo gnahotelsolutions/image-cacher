@@ -7,7 +7,7 @@ return [
     | Cache Path
     |--------------------------------------------------------------------------
     |
-    | The path where the manipulated images where will be saved. Sub-directories
+    | The path where the manipulated images will be saved. Sub-directories
     | will be created following the original image path:
     |
     | Actual image is in:
@@ -18,6 +18,19 @@ return [
     */
 
     'cache_path' => 'cache/images',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cache Root Path
+    |--------------------------------------------------------------------------
+    |
+    | The root path where the cache is. Sub-directories will be created following 
+    | the original image path. It is used to save the images in the correct direction
+    | but keeping it hidden from the image name.
+    |
+    */
+
+    'cache_root_path' => 'public',
 
     /*
     |--------------------------------------------------------------------------

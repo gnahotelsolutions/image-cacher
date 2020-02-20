@@ -5,27 +5,33 @@ namespace GNAHotelSolutions\ImageCacher;
 class Cacher
 {
     /** @var string  */
-    protected $cacheDirectory = 'cache/images';
+    protected $cacheDirectory;
 
-    public function __construct(?string $cacheDirectory = null)
+    /** @var string */
+    protected $imagesRootPath;
+
+    public function __construct(string $cacheDirectory = 'cache/images', string $imagesRootPath = '')
     {
-        if ($cacheDirectory !== null) {
-            $this->cacheDirectory = $cacheDirectory;
-        }
+        $this->cacheDirectory = $cacheDirectory;
+        $this->imagesRootPath = $imagesRootPath;
     }
 
-    public function resize(Image $image, $width = null, $height = null): Image
+    public function resize($image, $width = null, $height = null): Image
     {
         return $this->manipulate($image, $width, $height, false);
     }
 
-    public function crop(Image $image, $width = null, $height = null): Image
+    public function crop($image, $width = null, $height = null): Image
     {
         return $this->manipulate($image, $width, $height, true);
     }
 
-    protected function manipulate(Image $image, $width = null, $height = null, bool $cropImage = false): Image
+    protected function manipulate($image, $width = null, $height = null, bool $cropImage = false): Image
     {
+        if (is_string($image)) {
+            $image = new Image($image, $this->imagesRootPath);
+        }
+        
         if ($this->isSmallerThanRequested($image, $width, $height)) {
             return $image;
         }

@@ -68,6 +68,19 @@ class CacherTest extends TestCase
         $this->assertFileExists(self::CACHE_PATH . '/office/meetings_room/310x233/plant.jpg');
     }
 
+    /** @test */
+    public function can_use_image_as_string_with_default_root_path()
+    {
+        $cacher = new Cacher(self::CACHE_PATH, 'tests/fixtures');
+
+        $resized = $cacher->crop('office/meetings_room/plant.jpg', 200, 200);
+
+        $this->assertEquals(200, $resized->getWidth());
+        $this->assertEquals(200, $resized->getHeight());
+
+        $this->assertFileExists(self::CACHE_PATH . '/office/meetings_room/200x200/plant.jpg');
+    }
+
     private function deleteFolder(string $path): void
     {
         foreach (scandir($path) as $file) {

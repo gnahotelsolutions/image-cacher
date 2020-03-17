@@ -79,7 +79,16 @@ class Cacher
 
     protected function isAlreadyCached(Image $image, $width, $height): bool
     {
-        return file_exists($this->getCachedImageFullName($image, $width, $height));
+        return file_exists($this->getCachedImageFullName($image, $width, $height)) 
+            && $this->cachedImageIsTheSame($image, $width, $height);
+    }
+
+    protected function cachedImageIsTheSame(Image $image, $width, $height): bool
+    {
+        $cachedImageUpdatedAt = filemtime($this->getCachedImageFullName($image, $width, $height));
+        $imageUpdatedAt = filemtime($image->getOriginalFullPath());
+        
+        return $cachedImageUpdatedAt >= $imageUpdatedAt;
     }
 
     protected function getCachedImageFullName(Image $image, $width, $height): string

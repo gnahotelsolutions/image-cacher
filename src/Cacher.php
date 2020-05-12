@@ -175,7 +175,7 @@ class Cacher
     {
         $cachePath = "{$this->cacheRootPath}/{$this->cachePath}/{$this->getCacheImagePath($image->getPath(), $width, $height)}";
 
-        if (substr($cachePath, 0, 1) !== '') {
+        if (! in_array(substr($cachePath, 0, 1), ['', '/'])) {
             $cachePath = "/{$cachePath}";
         }
 

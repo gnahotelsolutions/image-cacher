@@ -110,4 +110,9 @@ class Image
     {
         return $this->width <= $width && $this->height <= $height;
     }
+
+    public function content(): string
+    {
+        return file_get_contents($this->getOriginalFullPath());
+    }
 }

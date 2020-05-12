@@ -44,4 +44,12 @@ class ImageTest extends TestCase
         $this->assertFalse($image->isSmallerThan(1080, 700)); // Height smaller
         $this->assertFalse($image->isSmallerThan(1070, 809)); // Both smaller
     }
+
+    /** @test */
+    public function can_return_image_content()
+    {
+        $image = new Image('office/meetings_room/plant.jpg', self::IMAGE_ROOT_PATH);
+
+        $this->assertNotNull($image->content());
+    }
 }

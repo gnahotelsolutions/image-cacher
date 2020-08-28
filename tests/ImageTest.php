@@ -24,14 +24,14 @@ class ImageTest extends TestCase
     {
         $image = new Image('office/meetings_room/plant.jpg', self::IMAGE_ROOT_PATH);
 
-        $this->assertEquals('office/meetings_room', $image->getPath());
-        $this->assertEquals('plant.jpg', $image->getName());
-        $this->assertEquals(1080, $image->getWidth());
-        $this->assertEquals(810, $image->getHeight());
-        $this->assertEquals('jpeg', $image->getType());
-        $this->assertEquals(1.33, $image->getAspectRatio());
-        $this->assertEquals(self::IMAGE_ROOT_PATH.'/office/meetings_room/plant.jpg', $image->getOriginalFullPath());
-        $this->assertEquals('office/meetings_room/plant.jpg', $image->getOriginalName());
+        $this->assertSame('office/meetings_room', $image->getPath());
+        $this->assertSame('plant.jpg', $image->getName());
+        $this->assertSame(1080, $image->getWidth());
+        $this->assertSame(810, $image->getHeight());
+        $this->assertSame('jpeg', $image->getType());
+        $this->assertSame(1.33, $image->getAspectRatio());
+        $this->assertSame(self::IMAGE_ROOT_PATH.'/office/meetings_room/plant.jpg', $image->getOriginalFullPath());
+        $this->assertSame('office/meetings_room/plant.jpg', $image->getOriginalName());
     }
 
     /** @test */

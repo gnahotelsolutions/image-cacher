@@ -12,14 +12,14 @@ class ImageCacherTest extends TestCase
 {
     use CacheFolder;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->createFolder(__DIR__.'/../../fixtures/cache');
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
 

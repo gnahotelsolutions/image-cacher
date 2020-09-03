@@ -14,14 +14,14 @@ class CacherTest extends TestCase
     const CACHE_ROOT_PATH = __DIR__.'/fixtures';
     const IMAGES_ROOT_PATH = __DIR__.'/fixtures/images';
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->createFolder(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -57,8 +57,8 @@ class CacherTest extends TestCase
         $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
             ->crop(new Image('office/meetings_room/plant.jpg', self::IMAGES_ROOT_PATH), 310);
 
-        $this->assertEquals(310, $resized->getWidth());
-        $this->assertEquals(233, $resized->getHeight());
+        $this->assertSame(310, $resized->getWidth());
+        $this->assertSame(233, $resized->getHeight());
 
         $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/310x233/plant.jpg');
     }
@@ -69,8 +69,8 @@ class CacherTest extends TestCase
         $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
             ->crop(new Image('office/meetings_room/plant.jpg', self::IMAGES_ROOT_PATH), null, 233);
 
-        $this->assertEquals(310, $resized->getWidth());
-        $this->assertEquals(233, $resized->getHeight());
+        $this->assertSame(310, $resized->getWidth());
+        $this->assertSame(233, $resized->getHeight());
 
         $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/310x233/plant.jpg');
     }
@@ -82,8 +82,8 @@ class CacherTest extends TestCase
 
         $resized = $cacher->crop('office/meetings_room/plant.jpg', 200, 200);
 
-        $this->assertEquals(200, $resized->getWidth());
-        $this->assertEquals(200, $resized->getHeight());
+        $this->assertSame(200, $resized->getWidth());
+        $this->assertSame(200, $resized->getHeight());
 
         $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200/plant.jpg');
     }
@@ -95,8 +95,8 @@ class CacherTest extends TestCase
 
         $resized = $cacher->crop('office/meetings_room/plant.jpg', 200, 200);
 
-        $this->assertEquals(200, $resized->getWidth());
-        $this->assertEquals(200, $resized->getHeight());
+        $this->assertSame(200, $resized->getWidth());
+        $this->assertSame(200, $resized->getHeight());
 
         $this->assertFileExists(self::CACHE_ROOT_PATH.'/v2/'.self::CACHE_PATH.'/office/meetings_room/200x200/plant.jpg');
 
@@ -120,8 +120,8 @@ class CacherTest extends TestCase
 
         $resized = $cacher->crop('office/meetings_room/plant.jpg', 200, 200);
 
-        $this->assertEquals(200, $resized->getWidth());
-        $this->assertEquals(200, $resized->getHeight());
+        $this->assertSame(200, $resized->getWidth());
+        $this->assertSame(200, $resized->getHeight());
 
         $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200/plant.jpg');
     }
@@ -140,8 +140,8 @@ class CacherTest extends TestCase
         $resized = $cacher->crop('office/meetings_room/plant.jpg', 200, 200);
 
         $this->assertNotEquals(200, $resized->getWidth());
-        $this->assertEquals($previousCachedImage->getWidth(), $resized->getWidth());
-        $this->assertEquals($previousCachedImage->getHeight(), $resized->getHeight());
+        $this->assertSame($previousCachedImage->getWidth(), $resized->getWidth());
+        $this->assertSame($previousCachedImage->getHeight(), $resized->getHeight());
 
         $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200/plant.jpg');
     }

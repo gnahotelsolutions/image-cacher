@@ -145,4 +145,38 @@ class CacherTest extends TestCase
 
         $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200/plant.jpg');
     }
+
+    /** @test */
+    public function it_creates_cached_image_from_webp_format()
+    {
+        $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
+            ->crop(new Image('office/meetings_room/plant.webp', self::IMAGES_ROOT_PATH), null, 233);
+
+        $this->assertSame(310, $resized->getWidth());
+        $this->assertSame(233, $resized->getHeight());
+
+        $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/310x233/plant.webp');
+    }
+
+    /** @test */
+    public function it_creates_webp_cached_image_from_jpg_format()
+    {
+        $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
+            ->crop(new Image('office/meetings_room/plant.jpg', self::IMAGES_ROOT_PATH), null, 233, 'webp');
+
+        $this->assertSame(310, $resized->getWidth());
+        $this->assertSame(233, $resized->getHeight());
+
+        $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/310x233/plant.webp');
+    }
+
+    /** @test */
+    public function it_cannot_create_image_from_unsupported_format()
+    {
+        $this->expectExceptionMessage('Image type [gnahs] not supported');
+
+        $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
+            ->crop(new Image('office/meetings_room/plant.jpg', self::IMAGES_ROOT_PATH), null, 233, 'gnahs');
+
+    }
 }

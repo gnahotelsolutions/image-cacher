@@ -6,12 +6,15 @@ class Cacher
 {
     /** @var string  */
     protected $cachePath;
-    
+
     /** @var string  */
     protected $cacheRootPath;
 
     /** @var string */
     protected $imagesRootPath;
+
+    /** @var string */
+    protected $requiredFormat;
 
     public function __construct(string $cachePath = 'cache/images', string $cacheRootPath = '', string $imagesRootPath = '')
     {
@@ -20,13 +23,17 @@ class Cacher
         $this->imagesRootPath = rtrim($imagesRootPath, '/');
     }
 
-    public function resize($image, $width = null, $height = null): Image
+    public function resize($image, $width = null, $height = null, $format = null): Image
     {
+        $this->requiredFormat = $format;
+
         return $this->manipulate($image, $width, $height, false);
     }
 
-    public function crop($image, $width = null, $height = null): Image
+    public function crop($image, $width = null, $height = null, $format = null): Image
     {
+        $this->requiredFormat = $format;
+
         return $this->manipulate($image, $width, $height, true);
     }
 
@@ -79,7 +86,7 @@ class Cacher
 
     protected function isAlreadyCached(Image $image, $width, $height): bool
     {
-        return file_exists($this->getCachedImageFullName($image, $width, $height)) 
+        return file_exists($this->getCachedImageFullName($image, $width, $height))
             && $this->cachedImageIsTheSame($image, $width, $height);
     }
 
@@ -87,7 +94,7 @@ class Cacher
     {
         $cachedImageUpdatedAt = filemtime($this->getCachedImageFullName($image, $width, $height));
         $imageUpdatedAt = filemtime($image->getOriginalFullPath());
-        
+
         return $cachedImageUpdatedAt >= $imageUpdatedAt;
     }
 
@@ -107,7 +114,10 @@ class Cacher
 
     protected function getCachedImageName(Image $image, $width, $height): string
     {
-        return "{$this->getCacheImagePath($image->getPath(), $width, $height)}/{$image->getName()}";
+        $imageName = explode('.', $image->getName())[0];
+        $imageName = $this->requiredFormat === null ? $image->getName() : "{$imageName}.{$this->requiredFormat}";
+
+        return "{$this->getCacheImagePath($image->getPath(), $width, $height)}/{$imageName}";
     }
 
     protected function getCacheImagePath(string $path, $width, $height): string
@@ -134,6 +144,10 @@ class Cacher
             return imagecreatefromgif($image->getOriginalFullPath());
         }
 
+        if ($image->getType() === 'webp') {
+            return imagecreatefromwebp($image->getOriginalFullPath());
+        }
+
         throw new \Exception("Image type [{$image->getType()}] not supported.");
     }
 
@@ -156,6 +170,10 @@ class Cacher
     {
         $this->createCacheDirectoryIfNotExists($image, $width, $height);
 
+        if($this->requiredFormat !== null) {
+            $image->setType($this->requiredFormat);
+        }
+
         if ($image->getType() === 'jpeg') {
             return imagejpeg($layout, $this->getCachedImageFullName($image, $width, $height));
         }
@@ -166,6 +184,10 @@ class Cacher
 
         if ($image->getType() === 'gif') {
             return imagegif($layout, $this->getCachedImageFullName($image, $width, $height));
+        }
+
+        if ($image->getType() === 'webp') {
+            return imagewebp($layout, $this->getCachedImageFullName($image, $width, $height));
         }
 
         throw new \Exception("Image type [{$image->getType()}] not supported.");

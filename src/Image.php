@@ -106,6 +106,11 @@ class Image
         return round($this->width / $this->height, 2);
     }
 
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
     public function isSmallerThan(?int $width, ?int $height): bool
     {
         return $this->width <= $width && $this->height <= $height;

@@ -149,6 +149,10 @@ class CacherTest extends TestCase
     /** @test */
     public function it_creates_cached_image_from_webp_format()
     {
+        if (! function_exists('imagecreatefromwebp')) {
+            $this->markTestSkipped();
+        }
+        
         $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
             ->crop(new Image('office/meetings_room/plant.webp', self::IMAGES_ROOT_PATH), null, 233);
 
@@ -161,6 +165,10 @@ class CacherTest extends TestCase
     /** @test */
     public function it_creates_webp_cached_image_from_jpg_format()
     {
+        if (! function_exists('imagecreatefromwebp')) {
+            $this->markTestSkipped();
+        }
+
         $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
             ->crop(new Image('office/meetings_room/plant.jpg', self::IMAGES_ROOT_PATH), null, 233, 'webp');
 

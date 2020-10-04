@@ -2,6 +2,8 @@
 
 namespace GNAHotelSolutions\ImageCacher;
 
+use Exception;
+
 class Cacher
 {
     /** @var string  */
@@ -14,26 +16,40 @@ class Cacher
     protected $imagesRootPath;
 
     /** @var string */
-    protected $requiredFormat;
+    protected $outputFormat = null;
 
-    public function __construct(string $cachePath = 'cache/images', string $cacheRootPath = '', string $imagesRootPath = '')
-    {
+    const SUPPORTED_OUTPUT_FORMATS = ['webp'];
+
+    public function __construct(
+        string $cachePath = 'cache/images',
+        string $cacheRootPath = '',
+        string $imagesRootPath = '',
+        ?string $outputFormat = null
+    ) {
         $this->cachePath = $cachePath;
         $this->cacheRootPath = rtrim($cacheRootPath, '/');
         $this->imagesRootPath = rtrim($imagesRootPath, '/');
+        $this->outputFormat = $outputFormat;
     }
 
-    public function resize($image, $width = null, $height = null, $format = null): Image
+    public function setOutputFormat(string $format): self
     {
-        $this->requiredFormat = $format;
+        if (! in_array($format, self::SUPPORTED_OUTPUT_FORMATS)) {
+            throw new Exception("Cannot transform files into `{$format}` because is not a supported format.");
+        }
 
+        $this->outputFormat = $format;
+
+        return $this;
+    }
+
+    public function resize($image, $width = null, $height = null): Image
+    {
         return $this->manipulate($image, $width, $height, false);
     }
 
-    public function crop($image, $width = null, $height = null, $format = null): Image
+    public function crop($image, $width = null, $height = null): Image
     {
-        $this->requiredFormat = $format;
-
         return $this->manipulate($image, $width, $height, true);
     }
 
@@ -49,6 +65,10 @@ class Cacher
 
         $resizedWidth = $width ?? round($height * $image->getAspectRatio());
         $resizedHeight = $height ?? round($width / $image->getAspectRatio());
+
+        if ($this->outputFormat !== null && $this->outputFormat !== $image->getOutputFormat()) {
+            $image->setOutputFormat($this->outputFormat);
+        }
 
         if ($this->isAlreadyCached($image, $resizedWidth, $resizedHeight)) {
             return new Image($this->getCachedImagePathName($image, $resizedWidth, $resizedHeight), $this->cacheRootPath);
@@ -114,10 +134,7 @@ class Cacher
 
     protected function getCachedImageName(Image $image, $width, $height): string
     {
-        $imageName = explode('.', $image->getName())[0];
-        $imageName = $this->requiredFormat === null ? $image->getName() : "{$imageName}.{$this->requiredFormat}";
-
-        return "{$this->getCacheImagePath($image->getPath(), $width, $height)}/{$imageName}";
+        return "{$this->getCacheImagePath($image->getPath(), $width, $height)}/{$image->getName()}";
     }
 
     protected function getCacheImagePath(string $path, $width, $height): string
@@ -132,23 +149,23 @@ class Cacher
 
     protected function getImageResource(Image $image)
     {
-        if ($image->getType() === 'jpeg') {
+        if ($image->getOutputFormat() === 'jpeg') {
             return imagecreatefromjpeg($image->getOriginalFullPath());
         }
 
-        if ($image->getType() === 'png') {
+        if ($image->getOutputFormat() === 'png') {
             return imagecreatefrompng($image->getOriginalFullPath());
         }
 
-        if ($image->getType() === 'gif') {
+        if ($image->getOutputFormat() === 'gif') {
             return imagecreatefromgif($image->getOriginalFullPath());
         }
 
-        if ($image->getType() === 'webp') {
+        if ($image->getOutputFormat() === 'webp') {
             return imagecreatefromwebp($image->getOriginalFullPath());
         }
 
-        throw new \Exception("Image type [{$image->getType()}] not supported.");
+        throw new \Exception("Image type [{$image->getOutputFormat()}] not supported.");
     }
 
     protected function getCutEdges(Image $image, int $width, int $height): array
@@ -170,27 +187,23 @@ class Cacher
     {
         $this->createCacheDirectoryIfNotExists($image, $width, $height);
 
-        if($this->requiredFormat !== null) {
-            $image->setType($this->requiredFormat);
-        }
-
-        if ($image->getType() === 'jpeg') {
+        if ($image->getOutputFormat() === 'jpeg') {
             return imagejpeg($layout, $this->getCachedImageFullName($image, $width, $height));
         }
 
-        if ($image->getType() === 'png') {
+        if ($image->getOutputFormat() === 'png') {
             return imagepng($layout, $this->getCachedImageFullName($image, $width, $height));
         }
 
-        if ($image->getType() === 'gif') {
+        if ($image->getOutputFormat() === 'gif') {
             return imagegif($layout, $this->getCachedImageFullName($image, $width, $height));
         }
 
-        if ($image->getType() === 'webp') {
+        if ($image->getOutputFormat() === 'webp') {
             return imagewebp($layout, $this->getCachedImageFullName($image, $width, $height));
         }
 
-        throw new \Exception("Image type [{$image->getType()}] not supported.");
+        throw new \Exception("Image type [{$image->getOutputFormat()}] not supported.");
     }
 
     protected function createCacheDirectoryIfNotExists(Image $image, $width, $height): void

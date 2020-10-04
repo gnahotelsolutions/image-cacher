@@ -22,6 +22,9 @@ class Image
     /** @var string */
     protected $type;
 
+    /** @var string */
+    protected $outputFormat = null;
+
     public function __construct(string $image, string $rootPath = '')
     {
         $this->rootPath = rtrim($rootPath, '/');
@@ -106,9 +109,22 @@ class Image
         return round($this->width / $this->height, 2);
     }
 
-    public function setType(string $type): void
+    public function getOutputFormat(): string
     {
-        $this->type = $type;
+        return $this->outputFormat ?? $this->getType();   
+    }
+
+    public function setOutputFormat(string $outputFormat): self
+    {
+        $this->outputFormat = $outputFormat;
+
+        $name = explode('.', $this->name);
+
+        array_pop($name);
+
+        $this->name = implode('.', $name) . ".{$this->outputFormat}";
+
+        return $this;
     }
 
     public function isSmallerThan(?int $width, ?int $height): bool

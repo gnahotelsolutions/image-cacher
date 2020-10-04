@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static Image resize(string|Image $image, int|null $width, int|null $height)
  * @method static Image crop(string|Image $image, int|null $width, int|null $height)
+ * @method static Cacher setOutputFormat(string)
  *
  * @see \GNAHotelSolutions\ImageCacher\Cacher
  */

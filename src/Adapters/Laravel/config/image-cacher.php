@@ -49,5 +49,19 @@ return [
     |
     */
 
-    'images_root_path' => 'public/storage'
+    'images_root_path' => 'public/storage',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Output Images Format
+    |--------------------------------------------------------------------------
+    |
+    | Use this variable to always transform the given images to a preferred format.
+    | You can use this option to always transform your images to `webp` extension.
+    | 
+    | Currently supported options are: webp
+    |
+    */
+
+    'output_format' => null,
 ];

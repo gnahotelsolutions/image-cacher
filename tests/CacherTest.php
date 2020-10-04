@@ -170,7 +170,8 @@ class CacherTest extends TestCase
         }
 
         $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
-            ->crop(new Image('office/meetings_room/plant.jpg', self::IMAGES_ROOT_PATH), null, 233, 'webp');
+            ->setOutputFormat('webp')
+            ->crop(new Image('office/meetings_room/plant.jpg', self::IMAGES_ROOT_PATH), null, 233);
 
         $this->assertSame(310, $resized->getWidth());
         $this->assertSame(233, $resized->getHeight());
@@ -181,10 +182,11 @@ class CacherTest extends TestCase
     /** @test */
     public function it_cannot_create_image_from_unsupported_format()
     {
-        $this->expectExceptionMessage('Image type [gnahs] not supported');
+        $this->expectExceptionMessage('Cannot transform files into `gnahs` because is not a supported format.');
 
         $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
-            ->crop(new Image('office/meetings_room/plant.jpg', self::IMAGES_ROOT_PATH), null, 233, 'gnahs');
+            ->setOutputFormat('gnahs')
+            ->crop(new Image('office/meetings_room/plant.jpg', self::IMAGES_ROOT_PATH), null, 233);
 
     }
 }

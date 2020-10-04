@@ -46,4 +46,23 @@ class ImageCacherTest extends TestCase
 
         $this->assertInstanceOf(Image::class, $resized);
     }
+
+    /** @test */
+    public function can_transform_images_to_webp_by_default()
+    {
+        config(['image-cacher' => [
+            'cache_path' => 'cache',
+            'cache_root_path' => __DIR__.'/../../fixtures',
+            'images_root_path' => __DIR__.'/../../fixtures/images',
+            'output_format' => 'webp'
+        ]]);
+
+        $resized = ImageCacher::crop('office/meetings_room/plant.jpg', 300, 300);
+
+        $this->assertFileExists(__DIR__.'/../../fixtures/cache/office/meetings_room/300x300/plant.webp');
+
+        $this->assertInstanceOf(Image::class, $resized);
+
+        $this->assertEquals('webp', $resized->getType());
+    }
 }

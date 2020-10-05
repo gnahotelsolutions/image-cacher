@@ -149,23 +149,7 @@ class Cacher
 
     protected function getImageResource(Image $image)
     {
-        if ($image->getOutputFormat() === 'jpeg') {
-            return imagecreatefromjpeg($image->getOriginalFullPath());
-        }
-
-        if ($image->getOutputFormat() === 'png') {
-            return imagecreatefrompng($image->getOriginalFullPath());
-        }
-
-        if ($image->getOutputFormat() === 'gif') {
-            return imagecreatefromgif($image->getOriginalFullPath());
-        }
-
-        if ($image->getOutputFormat() === 'webp') {
-            return imagecreatefromwebp($image->getOriginalFullPath());
-        }
-
-        throw new \Exception("Image type [{$image->getOutputFormat()}] not supported.");
+        return Manipulator::create($image->getOutputFormat(), $image->getOriginalFullPath());
     }
 
     protected function getCutEdges(Image $image, int $width, int $height): array
@@ -187,23 +171,7 @@ class Cacher
     {
         $this->createCacheDirectoryIfNotExists($image, $width, $height);
 
-        if ($image->getOutputFormat() === 'jpeg') {
-            return imagejpeg($layout, $this->getCachedImageFullName($image, $width, $height));
-        }
-
-        if ($image->getOutputFormat() === 'png') {
-            return imagepng($layout, $this->getCachedImageFullName($image, $width, $height));
-        }
-
-        if ($image->getOutputFormat() === 'gif') {
-            return imagegif($layout, $this->getCachedImageFullName($image, $width, $height));
-        }
-
-        if ($image->getOutputFormat() === 'webp') {
-            return imagewebp($layout, $this->getCachedImageFullName($image, $width, $height));
-        }
-
-        throw new \Exception("Image type [{$image->getOutputFormat()}] not supported.");
+        return Manipulator::save($image->getOutputFormat(), $layout, $this->getCachedImageFullName($image, $width, $height));
     }
 
     protected function createCacheDirectoryIfNotExists(Image $image, $width, $height): void

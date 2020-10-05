@@ -3,6 +3,7 @@
 namespace GNAHotelSolutions\ImageCacher\Tests;
 
 use Exception;
+use GNAHotelSolutions\ImageCacher\Format;
 use GNAHotelSolutions\ImageCacher\Image;
 use PHPUnit\Framework\TestCase;
 
@@ -28,7 +29,7 @@ class ImageTest extends TestCase
         $this->assertSame('plant.jpg', $image->getName());
         $this->assertSame(1080, $image->getWidth());
         $this->assertSame(810, $image->getHeight());
-        $this->assertSame('jpeg', $image->getType());
+        $this->assertSame(Format::JPEG, $image->getType());
         $this->assertSame(1.33, $image->getAspectRatio());
         $this->assertSame(self::IMAGE_ROOT_PATH.'/office/meetings_room/plant.jpg', $image->getOriginalFullPath());
         $this->assertSame('office/meetings_room/plant.jpg', $image->getOriginalName());

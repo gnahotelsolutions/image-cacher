@@ -3,6 +3,7 @@
 namespace GNAHotelSolutions\ImageCacher\Tests;
 
 use GNAHotelSolutions\ImageCacher\Cacher;
+use GNAHotelSolutions\ImageCacher\Format;
 use GNAHotelSolutions\ImageCacher\Image;
 use PHPUnit\Framework\TestCase;
 
@@ -168,7 +169,7 @@ class CacherTest extends TestCase
     public function it_creates_webp_cached_image_from_jpg_format()
     {
         $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
-            ->setOutputFormat('webp')
+            ->setOutputFormat(Format::WEBP)
             ->crop(new Image('office/meetings_room/plant.jpg', self::IMAGES_ROOT_PATH), null, 233);
 
         $this->assertSame(310, $resized->getWidth());

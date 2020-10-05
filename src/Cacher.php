@@ -18,7 +18,7 @@ class Cacher
     /** @var string */
     protected $outputFormat = null;
 
-    const SUPPORTED_OUTPUT_FORMATS = ['webp'];
+    const SUPPORTED_OUTPUT_FORMATS = [Format::WEBP];
 
     public function __construct(
         string $cachePath = 'cache/images',
@@ -144,7 +144,7 @@ class Cacher
 
     protected function isAlpha(Image $image): bool
     {
-        return in_array($image->getType(), ['gif', 'png']);
+        return in_array($image->getType(), [Format::GIF, Format::PNG]);
     }
 
     protected function getImageResource(Image $image)

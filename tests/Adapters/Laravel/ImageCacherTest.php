@@ -4,6 +4,7 @@ namespace GNAHotelSolutions\ImageCacher\Tests\Adapters\Laravel;
 
 use GNAHotelSolutions\ImageCacher\Adapters\Laravel\Facades\ImageCacher;
 use GNAHotelSolutions\ImageCacher\Adapters\Laravel\ImageCacherServiceProvider;
+use GNAHotelSolutions\ImageCacher\Format;
 use GNAHotelSolutions\ImageCacher\Image;
 use GNAHotelSolutions\ImageCacher\Tests\CacheFolder;
 use Orchestra\Testbench\TestCase;
@@ -57,7 +58,7 @@ class ImageCacherTest extends TestCase
             'cache_path' => 'cache',
             'cache_root_path' => __DIR__.'/../../fixtures',
             'images_root_path' => __DIR__.'/../../fixtures/images',
-            'output_format' => 'webp'
+            'output_format' => Format::WEBP
         ]]);
 
         $resized = ImageCacher::crop('office/meetings_room/plant.jpg', 300, 300);
@@ -66,6 +67,6 @@ class ImageCacherTest extends TestCase
 
         $this->assertInstanceOf(Image::class, $resized);
 
-        $this->assertEquals('webp', $resized->getType());
+        $this->assertEquals(Format::WEBP, $resized->getType());
     }
 }

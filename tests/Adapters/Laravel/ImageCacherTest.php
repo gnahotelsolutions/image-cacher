@@ -47,7 +47,10 @@ class ImageCacherTest extends TestCase
         $this->assertInstanceOf(Image::class, $resized);
     }
 
-    /** @test */
+    /**
+     * @group webp
+     * @test
+     */
     public function can_transform_images_to_webp_by_default()
     {
         config(['image-cacher' => [

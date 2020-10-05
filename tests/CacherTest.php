@@ -109,7 +109,7 @@ class CacherTest extends TestCase
         // Create a cached version of the image first, using original image
         mkdir(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200', 0777, true);
         copy(self::IMAGES_ROOT_PATH.'/office/meetings_room/plant.jpg', self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200/plant.jpg');
-        
+
         // Set older modification date for the cached image
         touch(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200/plant.jpg', now()->subYears(20)->timestamp);
 
@@ -132,7 +132,7 @@ class CacherTest extends TestCase
         // Create a cached version of the image first, using original image
         mkdir(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200', 0777, true);
         copy(self::IMAGES_ROOT_PATH.'/office/meetings_room/plant.jpg', self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200/plant.jpg');
-        
+
         $previousCachedImage = new Image('office/meetings_room/200x200/plant.jpg', self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH);
 
         $cacher = new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH, self::IMAGES_ROOT_PATH);
@@ -144,5 +144,47 @@ class CacherTest extends TestCase
         $this->assertSame($previousCachedImage->getHeight(), $resized->getHeight());
 
         $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200/plant.jpg');
+    }
+
+    /**
+     * @group webp
+     * @test
+     */
+    public function it_creates_cached_image_from_webp_format()
+    {
+        $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
+            ->crop(new Image('office/meetings_room/plant.webp', self::IMAGES_ROOT_PATH), null, 233);
+
+        $this->assertSame(310, $resized->getWidth());
+        $this->assertSame(233, $resized->getHeight());
+
+        $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/310x233/plant.webp');
+    }
+
+    /**
+     * @group webp
+     * @test
+     */
+    public function it_creates_webp_cached_image_from_jpg_format()
+    {
+        $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
+            ->setOutputFormat('webp')
+            ->crop(new Image('office/meetings_room/plant.jpg', self::IMAGES_ROOT_PATH), null, 233);
+
+        $this->assertSame(310, $resized->getWidth());
+        $this->assertSame(233, $resized->getHeight());
+
+        $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/310x233/plant.webp');
+    }
+
+    /** @test */
+    public function it_cannot_create_image_from_unsupported_format()
+    {
+        $this->expectExceptionMessage('Cannot transform files into `gnahs` because is not a supported format.');
+
+        $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
+            ->setOutputFormat('gnahs')
+            ->crop(new Image('office/meetings_room/plant.jpg', self::IMAGES_ROOT_PATH), null, 233);
+
     }
 }

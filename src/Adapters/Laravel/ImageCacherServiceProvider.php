@@ -15,7 +15,8 @@ class ImageCacherServiceProvider extends ServiceProvider
             return new Cacher(
                 config('image-cacher.cache_path'), 
                 config('image-cacher.cache_root_path'), 
-                config('image-cacher.images_root_path')
+                config('image-cacher.images_root_path'),
+                config('image-cacher.output_format')
             ); 
         });
     }

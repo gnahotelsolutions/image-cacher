@@ -109,7 +109,7 @@ class CacherTest extends TestCase
         // Create a cached version of the image first, using original image
         mkdir(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200', 0777, true);
         copy(self::IMAGES_ROOT_PATH.'/office/meetings_room/plant.jpg', self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200/plant.jpg');
-        
+
         // Set older modification date for the cached image
         touch(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200/plant.jpg', now()->subYears(20)->timestamp);
 
@@ -132,7 +132,7 @@ class CacherTest extends TestCase
         // Create a cached version of the image first, using original image
         mkdir(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200', 0777, true);
         copy(self::IMAGES_ROOT_PATH.'/office/meetings_room/plant.jpg', self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200/plant.jpg');
-        
+
         $previousCachedImage = new Image('office/meetings_room/200x200/plant.jpg', self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH);
 
         $cacher = new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH, self::IMAGES_ROOT_PATH);
@@ -146,13 +146,12 @@ class CacherTest extends TestCase
         $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/200x200/plant.jpg');
     }
 
-    /** @test */
+    /**
+     * @group webp
+     * @test
+     */
     public function it_creates_cached_image_from_webp_format()
     {
-        if (! function_exists('imagecreatefromwebp')) {
-            $this->markTestSkipped();
-        }
-        
         $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
             ->crop(new Image('office/meetings_room/plant.webp', self::IMAGES_ROOT_PATH), null, 233);
 
@@ -162,13 +161,12 @@ class CacherTest extends TestCase
         $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/office/meetings_room/310x233/plant.webp');
     }
 
-    /** @test */
+    /**
+     * @group webp
+     * @test
+     */
     public function it_creates_webp_cached_image_from_jpg_format()
     {
-        if (! function_exists('imagecreatefromwebp')) {
-            $this->markTestSkipped();
-        }
-
         $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
             ->setOutputFormat('webp')
             ->crop(new Image('office/meetings_room/plant.jpg', self::IMAGES_ROOT_PATH), null, 233);

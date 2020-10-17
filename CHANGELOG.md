@@ -2,13 +2,19 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+## 2.0.0
+
+- Added method to transform images into `webp` format [1bd7cb7](https://github.com/gnahotelsolutions/image-cacher/commit/1bd7cb77e1413182389ca6b87c73c6cfd4d1a7f6)
+- Added classes `Manipulator` and `Format` to improve code readability [6e7c5da](https://github.com/gnahotelsolutions/image-cacher/commit/6e7c5da6363cd0c76c70c505b062454ca08d1b1e)
+- Upgraded minimum PHP required version from 7.1 to 7.3 [4907433](https://github.com/gnahotelsolutions/image-cacher/commit/4907433a8add39a1744da390117b41f489a96670)
+
 ## 1.2.0
 
-Add method to return the image content [867828a](https://github.com/gnahotelsolutions/image-cacher/commit/867828ad48f5c7979cdef58e79cb4e2fd624290b)
+- Add method to return the image content [867828a](https://github.com/gnahotelsolutions/image-cacher/commit/867828ad48f5c7979cdef58e79cb4e2fd624290b)
 
 ## 1.1.0
 
-Override the previously cached thumbnail if the image is newer [810b060](https://github.com/gnahotelsolutions/image-cacher/commit/810b0600e558378f5adb98313d275333c6995da4)
+- Override the previously cached thumbnail if the image is newer [810b060](https://github.com/gnahotelsolutions/image-cacher/commit/810b0600e558378f5adb98313d275333c6995da4)
 
 ## 1.0.0 - 2020-02-20
 

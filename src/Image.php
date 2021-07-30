@@ -11,6 +11,9 @@ class Image
     protected $name;
 
     /** @var string */
+    protected $originalName;
+
+    /** @var string */
     protected $path;
 
     /** @var int */
@@ -30,6 +33,8 @@ class Image
         $this->rootPath = rtrim($rootPath, '/');
 
         [$this->name, $this->path] = $this->splitNameAndPath($image);
+
+        $this->originalName = $this->name;
 
         $this->verify();
 
@@ -64,10 +69,10 @@ class Image
     public function getOriginalName(): string
     {
         if ($this->getPath() === '') {
-            return $this->getName();
+            return $this->originalName;
         }
 
-        return "{$this->getPath()}/{$this->getName()}";
+        return "{$this->getPath()}/{$this->originalName}";
     }
 
     public function getOriginalFullPath(): string
@@ -111,7 +116,7 @@ class Image
 
     public function getOutputFormat(): string
     {
-        return $this->outputFormat ?? $this->getType();   
+        return $this->outputFormat ?? $this->getType();
     }
 
     public function setOutputFormat(string $outputFormat): self

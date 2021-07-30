@@ -149,7 +149,7 @@ class Cacher
 
     protected function getImageResource(Image $image)
     {
-        return Manipulator::create($image->getOutputFormat(), $image->getOriginalFullPath());
+        return Manipulator::create($image->getType(), $image->getOriginalFullPath());
     }
 
     protected function getCutEdges(Image $image, int $width, int $height): array

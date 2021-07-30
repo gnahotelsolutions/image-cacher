@@ -40,7 +40,11 @@ class Manipulator
         }
 
         if ($format === Format::WEBP) {
-            return imagewebp($layout, $name);
+            $image = imagewebp($layout, $name);
+
+            exec("cwebp -m 6 -pass 10 -mt -q 80 {$name} -o {$name}");
+
+            return $image;
         }
 
         throw new \Exception("Image type [{$format}] not supported.");

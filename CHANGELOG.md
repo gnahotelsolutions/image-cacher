@@ -2,6 +2,10 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+## 2.2.0
+
+- Add webp improvements [8fead5a](https://github.com/gnahotelsolutions/image-cacher/commit/8fead5aa121c25cd1362f50ee7eb5ebdce4deaf0)
+
 ## 2.0.0
 
 - Added method to transform images into `webp` format [1bd7cb7](https://github.com/gnahotelsolutions/image-cacher/commit/1bd7cb77e1413182389ca6b87c73c6cfd4d1a7f6)

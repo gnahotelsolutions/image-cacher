@@ -1,7 +1,7 @@
 # Create smaller versions of the same image
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/gnahotelsolutions/image-cacher.svg?style=flat-square)](https://packagist.org/packages/gnahotelsolutions/image-cacher)
-[![Build Status](https://img.shields.io/travis/gnahotelsolutions/image-cacher/master.svg?style=flat-square)](https://travis-ci.org/gnahotelsolutions/image-cacher)
+![Build status](https://github.com/gnahotelsolutions/image-cacher/actions/workflows/php.yml/badge.svg)
 [![Quality Score](https://img.shields.io/scrutinizer/g/gnahotelsolutions/image-cacher.svg?style=flat-square)](https://scrutinizer-ci.com/g/gnahotelsolutions/image-cacher)
 [![Total Downloads](https://img.shields.io/packagist/dt/gnahotelsolutions/image-cacher.svg?style=flat-square)](https://packagist.org/packages/gnahotelsolutions/image-cacher)
 

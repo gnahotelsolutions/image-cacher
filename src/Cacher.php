@@ -94,9 +94,25 @@ class Cacher
 
         imagecopyresampled($layout, $this->getImageResource($image), 0, 0, $cutX, $cutY, $resizedWidth, $resizedHeight, $cutWidth, $cutHeight);
 
+        $this->applySharpen($layout);
+
         $this->saveImage($image, $layout, $resizedWidth, $resizedHeight);
 
         return new Image($this->getCachedImagePathName($image, $resizedWidth, $resizedHeight), $this->cacheRootPath);
+    }
+
+    protected function applySharpen($layout): void
+    {
+        $sharpenMatrix = array
+        (
+            array(-1, -1, -1),
+            array(-1, 25, -1),
+            array(-1, -1, -1),
+        );
+
+        $divisor = array_sum(array_map('array_sum', $sharpenMatrix));
+
+        imageconvolution($layout, $sharpenMatrix, $divisor, 0);
     }
 
     protected function isSmallerThanRequested(Image $image, $width, $height): bool

@@ -2,6 +2,10 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+## 2.3.0
+
+- Add sharpen filter to improve image quality [a48492c](https://github.com/gnahotelsolutions/image-cacher/commit/a48492cb7c4030c3b54964c398c99103b413cf06)
+
 ## 2.2.0
 
 - Add webp improvements [8fead5a](https://github.com/gnahotelsolutions/image-cacher/commit/8fead5aa121c25cd1362f50ee7eb5ebdce4deaf0)

@@ -25,7 +25,7 @@ class Manipulator
         throw new \Exception("Image type [{$format}] not supported.");
     }
 
-    public static function save(string $format, $layout, string $name): string
+    public static function save(string $format, $layout, string $name, int $quality = 80): string
     {
         if ($format === Format::JPEG) {
             return imagejpeg($layout, $name);
@@ -42,11 +42,11 @@ class Manipulator
         if ($format === Format::WEBP) {
             $image = imagewebp($layout, $name);
 
-            exec("cwebp -m 6 -pass 10 -mt -q 80 {$name} -o {$name}");
+            exec("cwebp -m 6 -pass 10 -mt -q $quality $name -o $name");
 
             return $image;
         }
 
-        throw new \Exception("Image type [{$format}] not supported.");
+        throw new \Exception("Image type [$format] not supported.");
     }
 }

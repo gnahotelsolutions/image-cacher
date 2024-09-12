@@ -13,11 +13,12 @@ class ImageCacherServiceProvider extends ServiceProvider
 
         $this->app->singleton(Cacher::class, function () {
             return new Cacher(
-                config('image-cacher.cache_path'), 
-                config('image-cacher.cache_root_path'), 
+                config('image-cacher.cache_path'),
+                config('image-cacher.cache_root_path'),
                 config('image-cacher.images_root_path'),
-                config('image-cacher.output_format')
-            ); 
+                config('image-cacher.output_format'),
+                config('image-cacher.quality', 80)
+        );
         });
     }
 

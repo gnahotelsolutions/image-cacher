@@ -2,6 +2,10 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+## 2.5.0
+
+- Fix Laravel singleton declaration [ac7f1e74](https://github.com/gnahotelsolutions/image-cacher/commit/ac7f1e744340280a58482f7d0d608b1490f718b3)
+
 ## 2.4.0
 
 - Option to select image quality with 80 as default [44c54223](https://github.com/gnahotelsolutions/image-cacher/commit/44c54223f49ebdf535bbd8df015161e3b5b6fc61)

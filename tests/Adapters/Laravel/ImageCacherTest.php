@@ -69,4 +69,27 @@ class ImageCacherTest extends TestCase
 
         $this->assertEquals(Format::WEBP, $resized->getType());
     }
+
+    /**
+     * @group webp
+     * @test
+     */
+    public function can_update_webp_quality_image_to_100()
+    {
+        config(['image-cacher' => [
+            'cache_path' => 'cache',
+            'cache_root_path' => __DIR__.'/../../fixtures',
+            'images_root_path' => __DIR__.'/../../fixtures/images',
+            'output_format' => Format::WEBP,
+            'quality' => 100
+        ]]);
+
+        $resized = ImageCacher::crop('office/meetings_room/plant.jpg', 300, 300);
+
+        $this->assertFileExists(__DIR__.'/../../fixtures/cache/office/meetings_room/300x300/plant.webp');
+
+        $this->assertInstanceOf(Image::class, $resized);
+
+        $this->assertEquals(100, config('image-cacher.quality'));
+    }
 }

@@ -4,6 +4,7 @@ namespace GNAHotelSolutions\ImageCacher\Tests\Adapters\Laravel;
 
 use GNAHotelSolutions\ImageCacher\Adapters\Laravel\Facades\ImageCacher;
 use GNAHotelSolutions\ImageCacher\Adapters\Laravel\ImageCacherServiceProvider;
+use GNAHotelSolutions\ImageCacher\Cacher;
 use GNAHotelSolutions\ImageCacher\Format;
 use GNAHotelSolutions\ImageCacher\Image;
 use GNAHotelSolutions\ImageCacher\Tests\CacheFolder;
@@ -91,5 +92,15 @@ class ImageCacherTest extends TestCase
         $this->assertInstanceOf(Image::class, $resized);
 
         $this->assertEquals(100, config('image-cacher.quality'));
+    }
+
+    public function singleton_is_working()
+    {
+        $cacher1 = app()->make(Cacher::class);
+        $cacher2 = app()->make(Cacher::class);
+
+        $this->assertSame($cacher1, $cacher2);
+
+        $this->assertSame(spl_object_id($cacher1), spl_object_id($cacher2));
     }
 }

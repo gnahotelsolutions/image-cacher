@@ -2,6 +2,10 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+## 2.4.0
+
+- Option to select image quality with 80 as default [44c54223](https://github.com/gnahotelsolutions/image-cacher/commit/44c54223f49ebdf535bbd8df015161e3b5b6fc61)
+
 ## 2.3.0
 
 - Add sharpen filter to improve image quality [a48492c](https://github.com/gnahotelsolutions/image-cacher/commit/a48492cb7c4030c3b54964c398c99103b413cf06)

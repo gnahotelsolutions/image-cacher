@@ -3,6 +3,7 @@
 namespace GNAHotelSolutions\ImageCacher\Adapters\Laravel;
 
 use GNAHotelSolutions\ImageCacher\Cacher;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
 class ImageCacherServiceProvider extends ServiceProvider
@@ -11,14 +12,14 @@ class ImageCacherServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/config/image-cacher.php', 'image-cacher');
 
-        $this->app->singleton(Cacher::class, function () {
+        $this->app->singleton(Cacher::class, function (Application $app, array $params) {
             return new Cacher(
-                config('image-cacher.cache_path'),
-                config('image-cacher.cache_root_path'),
-                config('image-cacher.images_root_path'),
-                config('image-cacher.output_format'),
-                config('image-cacher.quality', 80)
-        );
+        $params['cache_path'] ?? config('image-cacher.cache_path'),
+        $params['cache_root_path'] ?? config('image-cacher.cache_root_path'),
+        $params['images_root_path'] ?? config('image-cacher.images_root_path'),
+        $params['output_format'] ?? config('image-cacher.output_format'),
+        $params['quality'] ?? config('image-cacher.quality', 80)
+            );
         });
     }
 

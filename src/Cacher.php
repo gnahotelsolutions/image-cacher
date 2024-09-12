@@ -18,18 +18,23 @@ class Cacher
     /** @var string */
     protected $outputFormat = null;
 
+    /** @var int */
+    protected $quality = 80;
+
     const SUPPORTED_OUTPUT_FORMATS = [Format::WEBP];
 
     public function __construct(
         string $cachePath = 'cache/images',
         string $cacheRootPath = '',
         string $imagesRootPath = '',
-        ?string $outputFormat = null
+        ?string $outputFormat = null,
+        int $quality = 80
     ) {
         $this->cachePath = $cachePath;
         $this->cacheRootPath = rtrim($cacheRootPath, '/');
         $this->imagesRootPath = rtrim($imagesRootPath, '/');
         $this->outputFormat = $outputFormat;
+        $this->quality = $quality;
     }
 
     public function setOutputFormat(string $format): self
@@ -103,12 +108,11 @@ class Cacher
 
     protected function applySharpen($layout): void
     {
-        $sharpenMatrix = array
-        (
-            array(-1, -1, -1),
-            array(-1, 25, -1),
-            array(-1, -1, -1),
-        );
+        $sharpenMatrix = [
+            [-1, -1, -1],
+            [-1, 25, -1],
+            [-1, -1, -1],
+        ];
 
         $divisor = array_sum(array_map('array_sum', $sharpenMatrix));
 
@@ -187,7 +191,21 @@ class Cacher
     {
         $this->createCacheDirectoryIfNotExists($image, $width, $height);
 
-        return Manipulator::save($image->getOutputFormat(), $layout, $this->getCachedImageFullName($image, $width, $height));
+        if(! $this->hasValidName($image->getName())) {
+            throw new Exception("Image name is not supported.");
+        }
+
+        return Manipulator::save(
+            $image->getOutputFormat(),
+            $layout,
+            $this->getCachedImageFullName($image, $width, $height),
+            $this->quality
+        );
+    }
+
+    protected function hasValidName(string $name): bool
+    {
+        return preg_match('/^[a-zA-Z0-9_\-\.]+$/', $name);
     }
 
     protected function createCacheDirectoryIfNotExists(Image $image, $width, $height): void

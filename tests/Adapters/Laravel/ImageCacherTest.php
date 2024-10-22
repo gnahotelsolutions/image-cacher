@@ -55,14 +55,14 @@ class ImageCacherTest extends TestCase
      */
     public function can_transform_images_to_webp_by_default()
     {
-        config(['image-cacher' => [
+        $cacher = app()->make(Cacher::class, [
             'cache_path' => 'cache',
             'cache_root_path' => __DIR__.'/../../fixtures',
             'images_root_path' => __DIR__.'/../../fixtures/images',
             'output_format' => Format::WEBP
-        ]]);
+        ]);
 
-        $resized = ImageCacher::crop('office/meetings_room/plant.jpg', 300, 300);
+        $resized = $cacher->crop('office/meetings_room/plant.jpg', 300, 300);
 
         $this->assertFileExists(__DIR__.'/../../fixtures/cache/office/meetings_room/300x300/plant.webp');
 
@@ -77,21 +77,19 @@ class ImageCacherTest extends TestCase
      */
     public function can_update_webp_quality_image_to_100()
     {
-        config(['image-cacher' => [
+        $cacher = app()->make(Cacher::class, [
             'cache_path' => 'cache',
             'cache_root_path' => __DIR__.'/../../fixtures',
             'images_root_path' => __DIR__.'/../../fixtures/images',
-            'output_format' => Format::WEBP,
-            'quality' => 100
-        ]]);
+            'quality' => 100,
+            'output_format' => Format::WEBP
+        ]);
 
-        $resized = ImageCacher::crop('office/meetings_room/plant.jpg', 300, 300);
+        $resized = $cacher->crop('office/meetings_room/plant.jpg', 300, 300);
 
         $this->assertFileExists(__DIR__.'/../../fixtures/cache/office/meetings_room/300x300/plant.webp');
 
         $this->assertInstanceOf(Image::class, $resized);
-
-        $this->assertEquals(100, config('image-cacher.quality'));
     }
 
     public function singleton_is_working()

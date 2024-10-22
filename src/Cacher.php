@@ -27,14 +27,14 @@ class Cacher
         string $cachePath = 'cache/images',
         string $cacheRootPath = '',
         string $imagesRootPath = '',
-        ?string $outputFormat = null,
-        int $quality = 80
+        int $quality = 80,
+        ?string $outputFormat = null
     ) {
         $this->cachePath = $cachePath;
         $this->cacheRootPath = rtrim($cacheRootPath, '/');
         $this->imagesRootPath = rtrim($imagesRootPath, '/');
-        $this->outputFormat = $outputFormat;
         $this->quality = $quality;
+        $this->outputFormat = $outputFormat;
     }
 
     public function setOutputFormat(string $format): self

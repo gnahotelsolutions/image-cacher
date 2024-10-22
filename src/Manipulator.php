@@ -2,6 +2,8 @@
 
 namespace GNAHotelSolutions\ImageCacher;
 
+use Exception;
+
 class Manipulator
 {
     public static function create(string $format, string $path)
@@ -22,13 +24,21 @@ class Manipulator
             return imagecreatefromwebp($path);
         }
 
-        throw new \Exception("Image type [{$format}] not supported.");
+        throw new Exception("Image type [{$format}] not supported.");
     }
 
     public static function save(string $format, $layout, string $name, int $quality = 80): string
     {
-        if ($format === Format::JPEG) {
-            return imagejpeg($layout, $name);
+        if (self::isJpeg($format, $name)) {
+            $image = imagejpeg($layout, $name);
+
+            exec("jpegoptim --max=$quality --strip-all --all-progressive --force $name", $output, $resultCode);
+
+            if ($resultCode !== 0) {
+                throw new Exception("Error optimizing image.");
+            }
+
+            return $image;
         }
 
         if ($format === Format::PNG) {
@@ -42,11 +52,20 @@ class Manipulator
         if ($format === Format::WEBP) {
             $image = imagewebp($layout, $name);
 
-            exec("cwebp -m 6 -pass 10 -mt -q $quality $name -o $name");
+            exec("cwebp -m 6 -pass 10 -jpeg_like -mt -q $quality $name -o $name", $output, $resultCode);
+
+            if ($resultCode !== 0) {
+                throw new Exception('Error optimizing image');
+            }
 
             return $image;
         }
 
-        throw new \Exception("Image type [$format] not supported.");
+        throw new Exception('Image type [$format] not supported.');
+    }
+
+    protected static function isJpeg(string $format, string $name): bool
+    {
+        return $format === Format::JPEG || in_array(pathinfo($name, PATHINFO_EXTENSION), ['jpg', 'jpeg']);
     }
 }

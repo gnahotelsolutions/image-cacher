@@ -2,6 +2,10 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+## 2.6.0
+
+- Improve JPEG and WebP optimization during image cropping [43b964bf](https://github.com/gnahotelsolutions/image-cacher/commit/43b964bf48a245bdf2a17a4b77835312ccbbbcd8)
+
 ## 2.5.0
 
 - Fix Laravel singleton declaration [ac7f1e74](https://github.com/gnahotelsolutions/image-cacher/commit/ac7f1e744340280a58482f7d0d608b1490f718b3)

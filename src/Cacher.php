@@ -97,7 +97,7 @@ class Cacher
             $cutY = 0;
         }
 
-        imagecopyresampled($layout, $this->getImageResource($image), 0, 0, $cutX, $cutY, $resizedWidth, $resizedHeight, $cutWidth, $cutHeight);
+        imagecopyresampled($layout, $this->getImageResource($image), 0, 0, (int) $cutX, (int) $cutY, (int) $resizedWidth, (int) $resizedHeight, (int) $cutWidth, (int) $cutHeight);
 
         $this->applySharpen($layout);
 

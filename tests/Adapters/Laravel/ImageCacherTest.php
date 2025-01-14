@@ -34,6 +34,7 @@ class ImageCacherTest extends TestCase
     }
 
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function can_generate_image_using_facade()
     {
         config(['image-cacher' => [
@@ -53,6 +54,7 @@ class ImageCacherTest extends TestCase
      * @group webp
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function can_transform_images_to_webp_by_default()
     {
         $cacher = app()->make(Cacher::class, [
@@ -75,6 +77,7 @@ class ImageCacherTest extends TestCase
      * @group webp
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function can_update_webp_quality_image_to_100()
     {
         $cacher = app()->make(Cacher::class, [

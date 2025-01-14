@@ -30,6 +30,7 @@ class CacherTest extends TestCase
     }
 
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_does_not_create_cached_image_without_sizes()
     {
         $cacher = new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH);
@@ -37,10 +38,11 @@ class CacherTest extends TestCase
         $resized = $cacher->crop(new Image('office/river.jpg', self::IMAGES_ROOT_PATH));
 
         $this->assertInstanceOf(Image::class, $resized);
-        $this->assertDirectoryNotExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH . '/office');
+        $this->assertDirectoryDoesNotExist(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH . '/office');
     }
 
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_cached_image_from_width()
     {
         $cacher = new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH);
@@ -53,6 +55,7 @@ class CacherTest extends TestCase
     }
 
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_cached_image_scaling_the_height()
     {
         $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
@@ -65,6 +68,7 @@ class CacherTest extends TestCase
     }
 
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_cached_image_scaling_the_width()
     {
         $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
@@ -77,6 +81,7 @@ class CacherTest extends TestCase
     }
 
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function can_use_image_as_string_with_default_root_path()
     {
         $cacher = new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH, self::IMAGES_ROOT_PATH);
@@ -90,6 +95,7 @@ class CacherTest extends TestCase
     }
 
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function can_use_cache_root_path()
     {
         $cacher = new Cacher('cache', self::CACHE_ROOT_PATH.'/v2', self::IMAGES_ROOT_PATH);
@@ -105,6 +111,7 @@ class CacherTest extends TestCase
     }
 
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_overrides_already_cached_image_if_modified()
     {
         // Create a cached version of the image first, using original image
@@ -128,6 +135,7 @@ class CacherTest extends TestCase
     }
 
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_does_not_overrides_already_cached_image_if_not_modified()
     {
         // Create a cached version of the image first, using original image
@@ -151,6 +159,7 @@ class CacherTest extends TestCase
      * @group webp
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_cached_image_from_webp_format()
     {
         $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
@@ -166,6 +175,7 @@ class CacherTest extends TestCase
      * @group webp
      * @test
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_webp_cached_image_from_jpg_format()
     {
         $resized = (new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH))
@@ -179,6 +189,7 @@ class CacherTest extends TestCase
     }
 
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_cannot_create_image_from_unsupported_format()
     {
         $this->expectExceptionMessage('Cannot transform files into `gnahs` because is not a supported format.');

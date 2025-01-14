@@ -2,12 +2,10 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
-[9c15a5c4](https://github.com/gnahotelsolutions/image-cacher/commit/9c15a5c4828acb4af8f81da6dbe2d7993a9b9961)
 
 ## 3.0.0
 
-- Upgraded minimum PHP required version from 7.3 to 8.2
-- Upgraded tests to use format according with PHP >8.2 version
+- Upgraded minimum PHP required version from 7.3 to 8.2 and tests to use format according with PHP >8.2 version [9c15a5c4](https://github.com/gnahotelsolutions/image-cacher/commit/9c15a5c4828acb4af8f81da6dbe2d7993a9b9961)
 
 ## 2.6.0
 

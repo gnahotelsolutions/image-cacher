@@ -2,6 +2,13 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+[9c15a5c4](https://github.com/gnahotelsolutions/image-cacher/commit/9c15a5c4828acb4af8f81da6dbe2d7993a9b9961)
+
+## 3.0.0
+
+- Upgraded minimum PHP required version from 7.3 to 8.2
+- Upgraded tests to use format according with PHP >8.2 version
+
 ## 2.6.0
 
 - Improve JPEG and WebP optimization during image cropping [43b964bf](https://github.com/gnahotelsolutions/image-cacher/commit/43b964bf48a245bdf2a17a4b77835312ccbbbcd8)

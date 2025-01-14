@@ -12,6 +12,7 @@ class ImageTest extends TestCase
     const IMAGE_ROOT_PATH = __DIR__.'/fixtures/images';
 
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function not_existing_image_throws_exception()
     {
         $this->expectException(Exception::class);
@@ -21,6 +22,7 @@ class ImageTest extends TestCase
     }
 
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function can_extract_all_the_information()
     {
         $image = new Image('office/meetings_room/plant.jpg', self::IMAGE_ROOT_PATH);
@@ -36,6 +38,7 @@ class ImageTest extends TestCase
     }
 
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function can_determine_if_image_is_smaller_than()
     {
         $image = new Image('office/meetings_room/plant.jpg', self::IMAGE_ROOT_PATH);
@@ -47,6 +50,7 @@ class ImageTest extends TestCase
     }
 
     /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function can_return_image_content()
     {
         $image = new Image('office/meetings_room/plant.jpg', self::IMAGE_ROOT_PATH);

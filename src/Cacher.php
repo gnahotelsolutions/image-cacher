@@ -21,6 +21,9 @@ class Cacher
     /** @var int */
     protected $quality = 80;
 
+    /** @var int */
+    protected $sharpen = 25;
+
     const SUPPORTED_OUTPUT_FORMATS = [Format::WEBP];
 
     public function __construct(
@@ -28,13 +31,15 @@ class Cacher
         string $cacheRootPath = '',
         string $imagesRootPath = '',
         int $quality = 80,
-        ?string $outputFormat = null
+        ?string $outputFormat = null,
+        ?int $sharpen = 25,
     ) {
         $this->cachePath = $cachePath;
         $this->cacheRootPath = rtrim($cacheRootPath, '/');
         $this->imagesRootPath = rtrim($imagesRootPath, '/');
         $this->quality = $quality;
         $this->outputFormat = $outputFormat;
+        $this->sharpen = $sharpen;
     }
 
     public function setOutputFormat(string $format): self
@@ -110,7 +115,7 @@ class Cacher
     {
         $sharpenMatrix = [
             [-1, -1, -1],
-            [-1, 25, -1],
+            [-1, $this->sharpen, -1],
             [-1, -1, -1],
         ];
 

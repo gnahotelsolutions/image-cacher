@@ -2,6 +2,9 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+## 3.0.3
+
+- Add sharpen as parameter [e781a23f](https://github.com/gnahotelsolutions/image-cacher/commit/e781a23f4a37aac728bcc3c69142855731bdf54a)
 
 ## 3.0.0
 

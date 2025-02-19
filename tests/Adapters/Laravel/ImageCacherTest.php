@@ -85,7 +85,8 @@ class ImageCacherTest extends TestCase
             'cache_root_path' => __DIR__.'/../../fixtures',
             'images_root_path' => __DIR__.'/../../fixtures/images',
             'quality' => 100,
-            'output_format' => Format::WEBP
+            'output_format' => Format::WEBP,
+            'sharpen' => 18,
         ]);
 
         $resized = $cacher->crop('office/meetings_room/plant.jpg', 300, 300);

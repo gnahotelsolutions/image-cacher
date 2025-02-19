@@ -19,6 +19,7 @@ class ImageCacherServiceProvider extends ServiceProvider
                 $params['images_root_path'] ?? config('image-cacher.images_root_path'),
                 $params['quality'] ?? config('image-cacher.quality', 80),
                 $params['output_format'] ?? null,
+                    $params['sharpen'] ?? config('image-cacher.sharpen', 25),
             );
         });
     }

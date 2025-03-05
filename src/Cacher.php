@@ -69,7 +69,14 @@ class Cacher
             $image = new Image($image, $this->imagesRootPath);
         }
 
-        if ($this->isSmallerThanRequested($image, $width, $height)) {
+        if ($this->originalSizeIsRequested($width, $height)) {
+            return $image;
+        }
+
+        $resizedWidth = $width ?: round($height * $image->getAspectRatio());
+        $resizedHeight = $height ?: round($width / $image->getAspectRatio());
+
+        if ($this->isSmallerThanRequested($image, $resizedWidth, $resizedHeight)) {
             return $image;
         }
 
@@ -126,7 +133,12 @@ class Cacher
 
     protected function isSmallerThanRequested(Image $image, $width, $height): bool
     {
-        return (! $width && ! $height) || $image->isSmallerThan($width, $height);
+        return $image->isSmallerThan($width, $height);
+    }
+
+    protected function originalSizeIsRequested($width, $height): bool
+    {
+        return !$width && !$height;
     }
 
     protected function isAlreadyCached(Image $image, $width, $height): bool

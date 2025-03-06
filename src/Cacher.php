@@ -3,6 +3,7 @@
 namespace GNAHotelSolutions\ImageCacher;
 
 use Exception;
+use Imagick;
 
 class Cacher
 {
@@ -24,7 +25,7 @@ class Cacher
     /** @var int */
     protected $sharpen = 25;
 
-    const SUPPORTED_OUTPUT_FORMATS = [Format::WEBP];
+    const SUPPORTED_OUTPUT_FORMATS = [Format::WEBP, Format::AVIF, Format::PNG, Format::JPEG, Format::GIF];
 
     public function __construct(
         string $cachePath = 'cache/images',
@@ -80,9 +81,6 @@ class Cacher
             return $image;
         }
 
-        $resizedWidth = $width ?? round($height * $image->getAspectRatio());
-        $resizedHeight = $height ?? round($width / $image->getAspectRatio());
-
         if ($this->outputFormat !== null && $this->outputFormat !== $image->getOutputFormat()) {
             $image->setOutputFormat($this->outputFormat);
         }
@@ -91,6 +89,20 @@ class Cacher
             return new Image($this->getCachedImagePathName($image, $resizedWidth, $resizedHeight), $this->cacheRootPath);
         }
 
+        $gdLayout = $this->processWithGD($image, $resizedWidth, $resizedHeight, $cropImage);
+
+        $imagickLayout = null;
+        if ($image->getOutputFormat() === Format::AVIF && ! function_exists('imageavif')) {
+            $imagickLayout = $this->convertGDToImageMagick($gdLayout);
+        }
+
+        $this->saveImage($image, $gdLayout, $resizedWidth, $resizedHeight, $imagickLayout);
+
+        return new Image($this->getCachedImagePathName($image, $resizedWidth, $resizedHeight), $this->cacheRootPath);
+    }
+
+    protected function processWithGD($image, int $resizedWidth, int $resizedHeight, bool $cropImage)
+    {
         $layout = imagecreatetruecolor($resizedWidth, $resizedHeight);
 
         if ($this->isAlpha($image)) {
@@ -113,9 +125,20 @@ class Cacher
 
         $this->applySharpen($layout);
 
-        $this->saveImage($image, $layout, $resizedWidth, $resizedHeight);
+        return $layout;
+    }
 
-        return new Image($this->getCachedImagePathName($image, $resizedWidth, $resizedHeight), $this->cacheRootPath);
+    protected function convertGDToImageMagick($gdLayout): Imagick
+    {
+        ob_start();
+        imagepng($gdLayout);
+        $imageBlob = ob_get_clean();
+
+        $imagick = new Imagick();
+        $imagick->readImageBlob($imageBlob);
+        $imagick->setImageFormat(Format::AVIF);
+
+        return $imagick;
     }
 
     protected function applySharpen($layout): void
@@ -204,19 +227,20 @@ class Cacher
         return [$cutEdgeWidth, $cutEdgeHeight];
     }
 
-    protected function saveImage(Image $image, $layout, $width, $height): string
+    protected function saveImage(Image $image, $layout, $width, $height, ?\Imagick $imagickLayout = null): string
     {
         $this->createCacheDirectoryIfNotExists($image, $width, $height);
 
-        if(! $this->hasValidName($image->getName())) {
+        if (!$this->hasValidName($image->getName())) {
             throw new Exception("Image name is not supported.");
         }
 
         return Manipulator::save(
-            $image->getOutputFormat(),
-            $layout,
-            $this->getCachedImageFullName($image, $width, $height),
-            $this->quality
+            format: $image->getOutputFormat(),
+            layout: $layout,
+            name: $this->getCachedImageFullName($image, $width, $height),
+            quality: $this->quality,
+            imagickLayout: $imagickLayout
         );
     }
 

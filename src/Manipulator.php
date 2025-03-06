@@ -3,6 +3,7 @@
 namespace GNAHotelSolutions\ImageCacher;
 
 use Exception;
+use Imagick;
 
 class Manipulator
 {
@@ -24,10 +25,25 @@ class Manipulator
             return imagecreatefromwebp($path);
         }
 
-        throw new Exception("Image type [{$format}] not supported.");
+        if ($format === Format::AVIF) {
+            if (function_exists('imagecreatefromavif')) {
+                return imagecreatefromavif($path);
+            }
+
+            $imagick = new Imagick($path);
+            $tempResource = imagecreatefromstring($imagick->getImageBlob());
+
+            if (! $tempResource) {
+                throw new Exception("Failed to create image from AVIF.");
+            }
+
+            return $tempResource;
+        }
+
+        throw new Exception("Image type [$format] not supported.");
     }
 
-    public static function save(string $format, $layout, string $name, int $quality = 80): string
+    public static function save(string $format, $layout, string $name, int $quality = 80, ?Imagick $imagickLayout = null): string
     {
         if (self::isJpeg($format, $name)) {
             $image = imagejpeg($layout, $name);
@@ -61,7 +77,21 @@ class Manipulator
             return $image;
         }
 
-        throw new Exception('Image type [$format] not supported.');
+        if ($format === Format::AVIF) {
+            if (function_exists('imageavif')) {
+                return imageavif($layout, $name);
+            }
+
+            if ($imagickLayout) {
+                $imagickLayout->writeImage($name);
+
+                return $imagickLayout;
+            }
+
+            throw new Exception('Error optimizing image');
+        }
+
+        throw new Exception("Image type [$format] not supported.");
     }
 
     protected static function isJpeg(string $format, string $name): bool

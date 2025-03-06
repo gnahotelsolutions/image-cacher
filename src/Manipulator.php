@@ -82,11 +82,11 @@ class Manipulator
                 return imageavif($layout, $name);
             }
 
-            if ($imagickLayout) {
+            /*if ($imagickLayout) {
                 $imagickLayout->writeImage($name);
 
                 return $imagickLayout;
-            }
+            }*/
 
             throw new Exception('Error optimizing image');
         }

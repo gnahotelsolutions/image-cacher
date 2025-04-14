@@ -80,9 +80,6 @@ class Cacher
             return $image;
         }
 
-        $resizedWidth = $width ?? round($height * $image->getAspectRatio());
-        $resizedHeight = $height ?? round($width / $image->getAspectRatio());
-
         if ($this->outputFormat !== null && $this->outputFormat !== $image->getOutputFormat()) {
             $image->setOutputFormat($this->outputFormat);
         }

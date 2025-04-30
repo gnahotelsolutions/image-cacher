@@ -76,4 +76,16 @@ return [
     |
     */
     'quality' => 80,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Php Image Manager
+    |--------------------------------------------------------------------------
+    |
+    | Use this variable to select the preferred manager between `gd` and `image-magick`.
+    |
+    | Default option: gd
+    |
+    */
+    'manager' => env('IMAGE_CACHER_MANAGER', 'gd'),
 ];

@@ -3,7 +3,6 @@
 namespace GNAHotelSolutions\ImageCacher;
 
 use Exception;
-use Imagick;
 
 class Manipulator
 {
@@ -30,14 +29,7 @@ class Manipulator
                 return imagecreatefromavif($path);
             }
 
-            $imagick = new Imagick($path);
-            $tempResource = imagecreatefromstring($imagick->getImageBlob());
-
-            if (! $tempResource) {
-                throw new Exception("Failed to create image from AVIF.");
-            }
-
-            return $tempResource;
+            throw new Exception("Failed to create image from AVIF.");
         }
 
         throw new Exception("Image type [$format] not supported.");
@@ -81,12 +73,6 @@ class Manipulator
             if (function_exists('imageavif')) {
                 return imageavif($layout, $name);
             }
-
-            /*if ($imagickLayout) {
-                $imagickLayout->writeImage($name);
-
-                return $imagickLayout;
-            }*/
 
             throw new Exception('Error optimizing image');
         }

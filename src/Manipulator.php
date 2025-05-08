@@ -35,7 +35,7 @@ class Manipulator
         throw new Exception("Image type [$format] not supported.");
     }
 
-    public static function save(string $format, $layout, string $name, int $quality = 80, ?Imagick $imagickLayout = null): string
+    public static function save(string $format, $layout, string $name, int $quality = 80): string
     {
         if (self::isJpeg($format, $name)) {
             $image = imagejpeg($layout, $name);

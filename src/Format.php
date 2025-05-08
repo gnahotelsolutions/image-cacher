@@ -8,4 +8,5 @@ class Format
     const PNG = 'png';
     const GIF = 'gif';
     const WEBP = 'webp';
+    const AVIF = 'avif';
 }

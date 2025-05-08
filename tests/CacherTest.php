@@ -199,4 +199,92 @@ class CacherTest extends TestCase
             ->crop(new Image('office/meetings_room/plant.jpg', self::IMAGES_ROOT_PATH), null, 233);
 
     }
+
+    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function it_can_use_gd_manager()
+    {
+        $cacher = new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH, self::IMAGES_ROOT_PATH, 80, null, 25, 'gd');
+
+        $resized = $cacher->resize('bridge.jpg', 200, 150);
+
+        $this->assertInstanceOf(Image::class, $resized);
+        $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/200x150/bridge.jpg');
+
+        // Verificar dimensiones del archivo generado
+        $imageInfo = getimagesize(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/200x150/bridge.jpg');
+        $this->assertEquals(200, $imageInfo[0]);
+        $this->assertEquals(150, $imageInfo[1]);
+    }
+
+    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function it_can_use_imagick_manager_if_available()
+    {
+        $imageMagickAvailable = extension_loaded('imagick');
+
+        if (!$imageMagickAvailable) {
+            $this->markTestSkipped('ImageMagick extension not available');
+        }
+
+        $cacher = new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH, self::IMAGES_ROOT_PATH, 80, null, 25, 'image-magick');
+
+        $cacher->resize('bridge.jpg', 200, 150);
+
+        $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/200x150/bridge.jpg');
+
+        // Verificar dimensiones del archivo generado
+        $imageInfo = getimagesize(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/200x150/bridge.jpg');
+        $this->assertEquals(200, $imageInfo[0]);
+        $this->assertEquals(150, $imageInfo[1]);
+    }
+
+    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function it_can_set_manager_after_initialization()
+    {
+        $cacher = new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH, self::IMAGES_ROOT_PATH);
+
+        $cacher->setManager('gd');
+
+        $cacher->resize('bridge.jpg', 200, 150);
+
+        $this->assertFileExists(self::CACHE_ROOT_PATH.'/'.self::CACHE_PATH.'/200x150/bridge.jpg');
+    }
+
+    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function it_can_crop_using_selected_manager()
+    {
+        $cacher = new Cacher(
+            self::CACHE_PATH,
+            self::CACHE_ROOT_PATH,
+            self::IMAGES_ROOT_PATH,
+            80,
+            null,
+            25,
+            'gd'
+        );
+
+        $cacher->crop('bridge.jpg', 200, 150);
+
+        $this->assertFileExists(self::CACHE_ROOT_PATH . '/' . self::CACHE_PATH . '/200x150/bridge.jpg');
+
+        $imageInfo = getimagesize(self::CACHE_ROOT_PATH . '/' . self::CACHE_PATH . '/200x150/bridge.jpg');
+        $this->assertEquals(200, $imageInfo[0]);
+        $this->assertEquals(150, $imageInfo[1]);
+    }
+
+    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function it_throws_exception_on_invalid_manager()
+    {
+        $this->expectExceptionMessage('Unsupported image manager: invalid-manager');
+
+        $this->expectException(\Exception::class);
+
+        $cacher = new Cacher(self::CACHE_PATH, self::CACHE_ROOT_PATH, self::IMAGES_ROOT_PATH);
+
+        $cacher->setManager('invalid-manager');
+    }
 }

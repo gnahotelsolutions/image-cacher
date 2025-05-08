@@ -24,7 +24,15 @@ class Manipulator
             return imagecreatefromwebp($path);
         }
 
-        throw new Exception("Image type [{$format}] not supported.");
+        if ($format === Format::AVIF) {
+            if (function_exists('imagecreatefromavif')) {
+                return imagecreatefromavif($path);
+            }
+
+            throw new Exception("Failed to create image from AVIF.");
+        }
+
+        throw new Exception("Image type [$format] not supported.");
     }
 
     public static function save(string $format, $layout, string $name, int $quality = 80): string
@@ -61,7 +69,15 @@ class Manipulator
             return $image;
         }
 
-        throw new Exception('Image type [$format] not supported.');
+        if ($format === Format::AVIF) {
+            if (function_exists('imageavif')) {
+                return imageavif($layout, $name);
+            }
+
+            throw new Exception('Error optimizing image');
+        }
+
+        throw new Exception("Image type [$format] not supported.");
     }
 
     protected static function isJpeg(string $format, string $name): bool

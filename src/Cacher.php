@@ -39,7 +39,7 @@ class Cacher
         int $quality = 80,
         ?string $outputFormat = null,
         ?int $sharpen = 25,
-        ?string $manager = 'image-magick'
+        ?string $manager = 'gd'
     ) {
         $this->cachePath = $cachePath;
         $this->cacheRootPath = rtrim($cacheRootPath, '/');
@@ -107,7 +107,7 @@ class Cacher
         }
 
         $imageResource = $this->getImageResource($image);
-        
+
         $processedImage = $this->manager->process(
             $imageResource,
             $resizedWidth,
@@ -116,7 +116,7 @@ class Cacher
             $cropImage,
             $this->sharpen
         );
-        
+
         $this->saveImage($image, $processedImage, $resizedWidth, $resizedHeight);
 
         return new Image($this->getCachedImagePathName($image, $resizedWidth, $resizedHeight), $this->cacheRootPath);

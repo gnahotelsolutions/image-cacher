@@ -27,7 +27,7 @@ class GD extends Manager
         };
     }
 
-    public function process($imageResource, int $width, int $height, array $originalDimensions, bool $crop = false, int $sharpen = 0)
+    public function process($imageResource, int $width, int $height, array $originalDimensions, bool $crop = false, int $sharpen = 25)
     {
         $layout = imagecreatetruecolor($width, $height);
 

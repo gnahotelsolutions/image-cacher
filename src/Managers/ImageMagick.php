@@ -78,7 +78,7 @@ class ImageMagick extends Manager
         throw new Exception("Unsupported layout type for ImageMagick.");
     }
 
-    public function process($imageResource, int $width, int $height, array $originalDimensions, bool $crop = false, int $sharpen = 0)
+    public function process($imageResource, int $width, int $height, array $originalDimensions, bool $crop = false, int $sharpen = 25)
     {
         try {
             $imagick = $this->ensureImagickObject($imageResource);

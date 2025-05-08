@@ -30,14 +30,14 @@ class GD extends Manager
     public function process($imageResource, int $width, int $height, array $originalDimensions, bool $crop = false, int $sharpen = 0)
     {
         $layout = imagecreatetruecolor($width, $height);
-        
+
         $this->preserveTransparency($layout, $imageResource);
 
         if ($crop) {
             [$cutWidth, $cutHeight, $cutX, $cutY] = $this->calculateCropDimensions(
-                $originalDimensions[0], 
-                $originalDimensions[1], 
-                $width, 
+                $originalDimensions[0],
+                $originalDimensions[1],
+                $width,
                 $height
             );
         } else {
@@ -48,12 +48,12 @@ class GD extends Manager
         }
 
         imagecopyresampled(
-            $layout,       
-            $imageResource, 
-            0, 0,           
-            $cutX, $cutY,   
-            $width, $height, 
-            $cutWidth, $cutHeight 
+            $layout,
+            $imageResource,
+            0, 0,
+            $cutX, $cutY,
+            $width, $height,
+            $cutWidth, $cutHeight
         );
 
         if ($sharpen > 0) {
@@ -68,7 +68,7 @@ class GD extends Manager
         if (self::isJpeg($format, $name)) {
             $format = Format::JPEG;
         }
-        
+
         return match($format) {
             Format::JPEG => $this->saveJpeg($layout, $name, $quality),
             Format::PNG => imagepng($layout, $name),
@@ -78,21 +78,21 @@ class GD extends Manager
             default => throw new Exception("Image type [$format] not supported.")
         };
     }
-    
+
     protected function saveJpeg($layout, string $name, int $quality)
     {
         $image = imagejpeg($layout, $name, $quality);
-        
+
         if (!$image) {
             throw new Exception("Failed to save JPEG image");
         }
-        
+
 
         $jpegoptimAvailable = fn() => !empty(shell_exec("command -v jpegoptim"));
-        
+
         if ($jpegoptimAvailable()) {
             exec("jpegoptim --max=$quality --strip-all --all-progressive --force $name", $output, $resultCode);
-            
+
 
             if ($resultCode !== 0) {
                 error_log("Warning: jpegoptim optimization failed for $name");
@@ -101,20 +101,20 @@ class GD extends Manager
 
         return $image;
     }
-    
+
     protected function saveWebp($layout, string $name, int $quality)
     {
         $image = imagewebp($layout, $name, $quality);
-        
+
         if (!$image) {
             throw new Exception("Failed to save WebP image");
         }
-        
+
         $cwebpAvailable = fn() => !empty(shell_exec("command -v cwebp"));
-        
+
         if ($cwebpAvailable()) {
             exec("cwebp -m 6 -pass 10 -jpeg_like -mt -q $quality $name -o $name", $output, $resultCode);
-            
+
             if ($resultCode !== 0) {
                 error_log("Warning: cwebp optimization failed for $name");
             }
@@ -122,7 +122,7 @@ class GD extends Manager
 
         return $image;
     }
-    
+
     protected function preserveTransparency($layout, $source)
     {
         if (imageistruecolor($source) && imagecolortransparent($source) >= 0) {
@@ -130,25 +130,7 @@ class GD extends Manager
             imagesavealpha($layout, true);
         }
     }
-    
-    protected function calculateCropDimensions(int $srcWidth, int $srcHeight, int $destWidth, int $destHeight): array
-    {
-        $aspectRatio = $destWidth / $destHeight;
 
-        $cutWidth = round($srcHeight * $aspectRatio);
-
-        if ($cutWidth > $srcWidth) {
-            $cutWidth = $srcWidth;
-        }
-
-        $cutHeight = round($cutWidth / $aspectRatio);
-        
-        $cutX = ($srcWidth - $cutWidth) / 2;
-        $cutY = ($srcHeight - $cutHeight) / 2;
-
-        return [$cutWidth, $cutHeight, $cutX, $cutY];
-    }
-    
     protected function applySharpen($layout, int $sharpen): void
     {
         $sharpenMatrix = [
@@ -161,4 +143,4 @@ class GD extends Manager
 
         imageconvolution($layout, $sharpenMatrix, $divisor, 0);
     }
-} 
+}

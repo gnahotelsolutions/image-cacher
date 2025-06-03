@@ -76,4 +76,28 @@ return [
     |
     */
     'quality' => 80,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Image sharpen
+    |--------------------------------------------------------------------------
+    |
+    | Use this variable to select the preferred image sharpen.
+    |
+    | Default option: 25
+    |
+    */
+    'sharpen' => 25,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Php Image Manager
+    |--------------------------------------------------------------------------
+    |
+    | Use this variable to select the preferred manager between `gd` and `image-magick`.
+    |
+    | Default option: gd
+    |
+    */
+    'manager' => env('IMAGE_CACHER_MANAGER', 'gd'),
 ];

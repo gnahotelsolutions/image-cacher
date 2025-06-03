@@ -2,6 +2,11 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+## 4.0.0
+
+- Refactor Cacher to be able to use different managers [cd2f1f76](https://github.com/gnahotelsolutions/image-cacher/commit/cd2f1f764bc004a8819f3436d424a426d8b28966)
+- Add image magick and gd image managers [a27cd56c](https://github.com/gnahotelsolutions/image-cacher/commit/a27cd56ce524d7acce26c945193151da0c59163b)
+
 ## 3.0.4
 
 - Maintain aspect ratio when requested size is zero [c7ba7ab](https://github.com/gnahotelsolutions/image-cacher/commit/c7ba7abb10098b0dfdefa1d393a2d6cf50835fba)

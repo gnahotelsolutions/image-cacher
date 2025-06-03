@@ -3,6 +3,9 @@
 namespace GNAHotelSolutions\ImageCacher;
 
 use Exception;
+use GNAHotelSolutions\ImageCacher\Managers\ImageMagick;
+use GNAHotelSolutions\ImageCacher\Managers\Manager;
+use GNAHotelSolutions\ImageCacher\Managers\GD;
 
 class Cacher
 {
@@ -24,7 +27,10 @@ class Cacher
     /** @var int */
     protected $sharpen = 25;
 
-    const SUPPORTED_OUTPUT_FORMATS = [Format::WEBP];
+    /** @var Manager */
+    protected $manager = 'gd';
+
+    const SUPPORTED_OUTPUT_FORMATS = [Format::WEBP, Format::AVIF, Format::PNG, Format::JPEG, Format::GIF];
 
     public function __construct(
         string $cachePath = 'cache/images',
@@ -33,6 +39,7 @@ class Cacher
         int $quality = 80,
         ?string $outputFormat = null,
         ?int $sharpen = 25,
+        ?string $manager = 'gd'
     ) {
         $this->cachePath = $cachePath;
         $this->cacheRootPath = rtrim($cacheRootPath, '/');
@@ -40,6 +47,17 @@ class Cacher
         $this->quality = $quality;
         $this->outputFormat = $outputFormat;
         $this->sharpen = $sharpen;
+
+        $this->setManager($manager);
+    }
+
+    public function setManager(string $manager): void
+    {
+        $this->manager = match ($manager) {
+            'gd' => new GD(),
+            'image-magick' => new ImageMagick(),
+            default => throw new Exception("Unsupported image manager: $manager"),
+        };
     }
 
     public function setOutputFormat(string $format): self
@@ -88,44 +106,40 @@ class Cacher
             return new Image($this->getCachedImagePathName($image, $resizedWidth, $resizedHeight), $this->cacheRootPath);
         }
 
-        $layout = imagecreatetruecolor($resizedWidth, $resizedHeight);
+        $imageResource = $this->getImageResource($image);
 
-        if ($this->isAlpha($image)) {
-            imagealphablending($layout, false);
-            imagesavealpha($layout, true);
-        }
+        $processedImage = $this->manager->process(
+            $imageResource,
+            $resizedWidth,
+            $resizedHeight,
+            [$image->getWidth(), $image->getHeight()],
+            $cropImage,
+            $this->sharpen
+        );
 
-        if ($cropImage) {
-            [$cutWidth, $cutHeight] = $this->getCutEdges($image, $resizedWidth, $resizedHeight);
-            $cutX = ($image->getWidth() - $cutWidth) / 2;
-            $cutY = ($image->getHeight() - $cutHeight) / 2;
-        } else {
-            $cutWidth = $image->getWidth();
-            $cutHeight = $image->getHeight();
-            $cutX = 0;
-            $cutY = 0;
-        }
-
-        imagecopyresampled($layout, $this->getImageResource($image), 0, 0, $cutX, $cutY, $resizedWidth, $resizedHeight, $cutWidth, $cutHeight);
-
-        $this->applySharpen($layout);
-
-        $this->saveImage($image, $layout, $resizedWidth, $resizedHeight);
+        $this->saveImage($image, $processedImage, $resizedWidth, $resizedHeight);
 
         return new Image($this->getCachedImagePathName($image, $resizedWidth, $resizedHeight), $this->cacheRootPath);
     }
 
-    protected function applySharpen($layout): void
+    protected function saveImage(Image $image, $processedImage, $width, $height): string
     {
-        $sharpenMatrix = [
-            [-1, -1, -1],
-            [-1, $this->sharpen, -1],
-            [-1, -1, -1],
-        ];
+        $this->createCacheDirectoryIfNotExists($image, $width, $height);
 
-        $divisor = array_sum(array_map('array_sum', $sharpenMatrix));
+        if (!$this->hasValidName($image->getName())) {
+            throw new Exception("Image name is not supported.");
+        }
 
-        imageconvolution($layout, $sharpenMatrix, $divisor, 0);
+        try {
+            return $this->manager->save(
+                $image->getOutputFormat(),
+                $processedImage,
+                $this->getCachedImageFullName($image, $width, $height),
+                $this->quality
+            );
+        } catch (Exception $e) {
+            throw new Exception("Error al guardar la imagen: " . $e->getMessage());
+        }
     }
 
     protected function isSmallerThanRequested(Image $image, $width, $height): bool
@@ -183,38 +197,7 @@ class Cacher
 
     protected function getImageResource(Image $image)
     {
-        return Manipulator::create($image->getType(), $image->getOriginalFullPath());
-    }
-
-    protected function getCutEdges(Image $image, int $width, int $height): array
-    {
-        $aspectRatio = $width / $height;
-
-        $cutEdgeWidth = round($image->getHeight() * $aspectRatio);
-
-        if ($cutEdgeWidth > $image->getWidth()) {
-            $cutEdgeWidth = $image->getWidth();
-        }
-
-        $cutEdgeHeight = round($cutEdgeWidth / $aspectRatio);
-
-        return [$cutEdgeWidth, $cutEdgeHeight];
-    }
-
-    protected function saveImage(Image $image, $layout, $width, $height): string
-    {
-        $this->createCacheDirectoryIfNotExists($image, $width, $height);
-
-        if(! $this->hasValidName($image->getName())) {
-            throw new Exception("Image name is not supported.");
-        }
-
-        return Manipulator::save(
-            $image->getOutputFormat(),
-            $layout,
-            $this->getCachedImageFullName($image, $width, $height),
-            $this->quality
-        );
+        return $this->manager->create($image->getType(), $image->getOriginalFullPath());
     }
 
     protected function hasValidName(string $name): bool

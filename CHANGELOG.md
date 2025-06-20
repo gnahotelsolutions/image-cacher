@@ -2,6 +2,11 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+## 4.0.1
+
+- Check also uppercase jpg format at isJpeg function [5df38010](https://github.com/gnahotelsolutions/image-cacher/commit/5df38010715e0ba4985ed393923b7ae3e518e6ba)
+- Lowercase format to avoid mistake errors [cdbbf62e](https://github.com/gnahotelsolutions/image-cacher/commit/cdbbf62ed89d7577389b20f20987a39513affc85)
+
 ## 4.0.0
 
 - Refactor Cacher to be able to use different managers [cd2f1f76](https://github.com/gnahotelsolutions/image-cacher/commit/cd2f1f764bc004a8819f3436d424a426d8b28966)

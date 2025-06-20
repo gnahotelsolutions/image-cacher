@@ -12,7 +12,7 @@ abstract class Manager
 
     protected static function isJpeg(string $format, string $name): bool
     {
-        return $format === Format::JPEG || in_array(pathinfo($name, PATHINFO_EXTENSION), ['jpg', 'jpeg']);
+        return $format === Format::JPEG || in_array(pathinfo($name, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'JPG',  'JPEG']);
     }
 
     protected function calculateCropDimensions(int $srcWidth, int $srcHeight, int $destWidth, int $destHeight): array

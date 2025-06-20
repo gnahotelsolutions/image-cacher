@@ -2,6 +2,8 @@
 
 namespace GNAHotelSolutions\ImageCacher;
 
+use Str;
+
 class Image
 {
     /** @var string */
@@ -96,7 +98,7 @@ class Image
 
     public function getType(): string
     {
-        return $this->type;
+        return Str::lower($this->type);
     }
 
     public function getWidth(): int

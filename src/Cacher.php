@@ -6,6 +6,7 @@ use Exception;
 use GNAHotelSolutions\ImageCacher\Managers\ImageMagick;
 use GNAHotelSolutions\ImageCacher\Managers\Manager;
 use GNAHotelSolutions\ImageCacher\Managers\GD;
+use Str;
 
 class Cacher
 {
@@ -62,11 +63,11 @@ class Cacher
 
     public function setOutputFormat(string $format): self
     {
-        if (! in_array($format, self::SUPPORTED_OUTPUT_FORMATS)) {
+        if (! in_array(Str::lower($format), self::SUPPORTED_OUTPUT_FORMATS)) {
             throw new Exception("Cannot transform files into `{$format}` because is not a supported format.");
         }
 
-        $this->outputFormat = $format;
+        $this->outputFormat = Str::lower($format);
 
         return $this;
     }

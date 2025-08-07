@@ -2,6 +2,10 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+## 2.7.0
+
+- Add `=` as a valid character to check if image has a valid name [fb5dd4c8](https://github.com/gnahotelsolutions/image-cacher/commit/fb5dd4c8dbee5b451edf52578a6c17e5c038718a)
+
 ## 2.6.0
 
 - Improve JPEG and WebP optimization during image cropping [43b964bf](https://github.com/gnahotelsolutions/image-cacher/commit/43b964bf48a245bdf2a17a4b77835312ccbbbcd8)

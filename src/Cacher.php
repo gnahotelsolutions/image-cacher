@@ -191,7 +191,7 @@ class Cacher
     {
         $this->createCacheDirectoryIfNotExists($image, $width, $height);
 
-        if(! $this->hasValidName($image->getName())) {
+        if (! $this->hasValidName($image->getName())) {
             throw new Exception("Image name is not supported.");
         }
 
@@ -205,7 +205,7 @@ class Cacher
 
     protected function hasValidName(string $name): bool
     {
-        return preg_match('/^[a-zA-Z0-9_\-\.]+$/', $name);
+        return preg_match('/^[a-zA-Z0-9_\-\.=]+$/', $name);
     }
 
     protected function createCacheDirectoryIfNotExists(Image $image, $width, $height): void

@@ -125,10 +125,8 @@ class GD extends Manager
 
     protected function preserveTransparency($layout, $source)
     {
-        if (imageistruecolor($source) && imagecolortransparent($source) >= 0) {
-            imagealphablending($layout, false);
-            imagesavealpha($layout, true);
-        }
+        imagealphablending($layout, false);
+        imagesavealpha($layout, true);
     }
 
     protected function applySharpen($layout, int $sharpen): void

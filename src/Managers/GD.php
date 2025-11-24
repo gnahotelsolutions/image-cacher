@@ -70,65 +70,19 @@ class GD extends Manager
         }
 
         return match($format) {
-            Format::JPEG => $this->saveJpeg($layout, $name, $quality),
+            Format::JPEG => imagejpeg($layout, $name, $quality),
             Format::PNG => imagepng($layout, $name),
             Format::GIF => imagegif($layout, $name),
-            Format::WEBP => $this->saveWebp($layout, $name, $quality),
+            Format::WEBP => imagewebp($layout, $name, $quality),
             Format::AVIF => function_exists('imageavif') ? imageavif($layout, $name, $quality) : throw new Exception("AVIF not supported by this GD installation"),
             default => throw new Exception("Image type [$format] not supported.")
         };
     }
 
-    protected function saveJpeg($layout, string $name, int $quality)
-    {
-        $image = imagejpeg($layout, $name, $quality);
-
-        if (!$image) {
-            throw new Exception("Failed to save JPEG image");
-        }
-
-
-        $jpegoptimAvailable = fn() => !empty(shell_exec("command -v jpegoptim"));
-
-        if ($jpegoptimAvailable()) {
-            exec("jpegoptim --max=$quality --strip-all --all-progressive --force $name", $output, $resultCode);
-
-
-            if ($resultCode !== 0) {
-                error_log("Warning: jpegoptim optimization failed for $name");
-            }
-        }
-
-        return $image;
-    }
-
-    protected function saveWebp($layout, string $name, int $quality)
-    {
-        $image = imagewebp($layout, $name, $quality);
-
-        if (!$image) {
-            throw new Exception("Failed to save WebP image");
-        }
-
-        $cwebpAvailable = fn() => !empty(shell_exec("command -v cwebp"));
-
-        if ($cwebpAvailable()) {
-            exec("cwebp -m 6 -pass 10 -jpeg_like -mt -q $quality $name -o $name", $output, $resultCode);
-
-            if ($resultCode !== 0) {
-                error_log("Warning: cwebp optimization failed for $name");
-            }
-        }
-
-        return $image;
-    }
-
     protected function preserveTransparency($layout, $source)
     {
-        if (imageistruecolor($source) && imagecolortransparent($source) >= 0) {
-            imagealphablending($layout, false);
-            imagesavealpha($layout, true);
-        }
+        imagealphablending($layout, false);
+        imagesavealpha($layout, true);
     }
 
     protected function applySharpen($layout, int $sharpen): void

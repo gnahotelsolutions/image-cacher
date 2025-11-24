@@ -2,6 +2,11 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+## 4.0.2
+
+- Force keep transparency [912ec83f](https://github.com/gnahotelsolutions/image-cacher/commit/912ec83f291d417192c69c1a1fb03442b1646f74)
+- Remove custom commands to try to reduce server load  [7eb6c986](https://github.com/gnahotelsolutions/image-cacher/commit/7eb6c98600936879a439d5f791efb2b4a5067fee)
+
 ## 4.0.1
 
 - Check also uppercase jpg format at isJpeg function [5df38010](https://github.com/gnahotelsolutions/image-cacher/commit/5df38010715e0ba4985ed393923b7ae3e518e6ba)

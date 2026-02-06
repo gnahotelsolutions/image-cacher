@@ -2,6 +2,10 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+## 4.0.3
+
+- Add speed parameter [f30f689c](https://github.com/gnahotelsolutions/image-cacher/commit/f30f689ce087450c6ccb9b587ba4d8d6b87744d5)
+
 ## 4.0.2
 
 - Force keep transparency [912ec83f](https://github.com/gnahotelsolutions/image-cacher/commit/912ec83f291d417192c69c1a1fb03442b1646f74)

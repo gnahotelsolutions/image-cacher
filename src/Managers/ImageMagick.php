@@ -33,7 +33,7 @@ class ImageMagick extends Manager
         }
     }
 
-    public function save(string $format, $layout, string $name, int $quality = 80): string
+    public function save(string $format, $layout, string $name, int $quality = 80, int $speed = -1): string
     {
         if (!in_array($format, [Format::JPEG, Format::PNG, Format::GIF, Format::WEBP, Format::AVIF])) {
             throw new Exception("Format [$format] not supported by ImageMagick.");

@@ -21,6 +21,7 @@ class ImageCacherServiceProvider extends ServiceProvider
                 outputFormat: $params['output_format'] ?? null,
                 sharpen: $params['sharpen'] ?? config('image-cacher.sharpen', 25),
                 manager: $params['manager'] ?? config('image-cacher.manager', 'gd'),
+                speed: $params['speed'] ?? config('image-cacher.speed', -1),
             );
         });
     }

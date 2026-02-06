@@ -63,7 +63,7 @@ class GD extends Manager
         return $layout;
     }
 
-    public function save(string $format, $layout, string $name, int $quality = 80)
+    public function save(string $format, $layout, string $name, int $quality = 80, int $speed = -1)
     {
         if (self::isJpeg($format, $name)) {
             $format = Format::JPEG;
@@ -74,7 +74,7 @@ class GD extends Manager
             Format::PNG => imagepng($layout, $name),
             Format::GIF => imagegif($layout, $name),
             Format::WEBP => imagewebp($layout, $name, $quality),
-            Format::AVIF => function_exists('imageavif') ? imageavif($layout, $name, $quality) : throw new Exception("AVIF not supported by this GD installation"),
+            Format::AVIF => function_exists('imageavif') ? imageavif($layout, $name, $quality, $speed) : throw new Exception("AVIF not supported by this GD installation"),
             default => throw new Exception("Image type [$format] not supported.")
         };
     }

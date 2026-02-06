@@ -31,6 +31,9 @@ class Cacher
     /** @var Manager */
     protected $manager = 'gd';
 
+    /** @var int */
+    protected $speed = -1;
+
     const SUPPORTED_OUTPUT_FORMATS = [Format::WEBP, Format::AVIF, Format::PNG, Format::JPEG, Format::GIF];
 
     public function __construct(
@@ -40,7 +43,8 @@ class Cacher
         int $quality = 80,
         ?string $outputFormat = null,
         ?int $sharpen = 25,
-        ?string $manager = 'gd'
+        ?string $manager = 'gd',
+        int $speed = -1,
     ) {
         $this->cachePath = $cachePath;
         $this->cacheRootPath = rtrim($cacheRootPath, '/');
@@ -48,6 +52,7 @@ class Cacher
         $this->quality = $quality;
         $this->outputFormat = $outputFormat;
         $this->sharpen = $sharpen;
+        $this->speed = $speed;
 
         $this->setManager($manager);
     }
@@ -136,7 +141,8 @@ class Cacher
                 $image->getOutputFormat(),
                 $processedImage,
                 $this->getCachedImageFullName($image, $width, $height),
-                $this->quality
+                $this->quality,
+                $this->speed,
             );
         } catch (Exception $e) {
             throw new Exception("Error al guardar la imagen: " . $e->getMessage());

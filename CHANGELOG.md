@@ -2,6 +2,10 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+## 3.0.6
+
+- Return original image when it is svg [c7ba7abb](https://github.com/gnahotelsolutions/image-cacher/commit/c7ba7abb10098b0dfdefa1d393a2d6cf50835fba)
+
 ## 3.0.4
 
 - Maintain aspect ratio when requested size is zero [c7ba7ab](https://github.com/gnahotelsolutions/image-cacher/commit/c7ba7abb10098b0dfdefa1d393a2d6cf50835fba)

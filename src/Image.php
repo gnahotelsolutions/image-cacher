@@ -60,7 +60,7 @@ class Image
         if ($this->isSvg()) {
             $this->width = 0;
             $this->height = 0;
-            $this->type = 'svg';
+            $this->type = 'svg+xml';
 
             return $this;
         }

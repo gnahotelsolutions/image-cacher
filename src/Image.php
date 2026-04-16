@@ -57,6 +57,14 @@ class Image
 
     protected function extractImageInformation(): self
     {
+        if ($this->isSvg()) {
+            $this->width = 0;
+            $this->height = 0;
+            $this->type = 'svg';
+
+            return $this;
+        }
+
         $information = getimagesize($this->getOriginalFullPath());
 
         $this->width = $information[0];
@@ -64,6 +72,11 @@ class Image
         $this->type = explode('/', $information['mime'])[1];
 
         return $this;
+    }
+
+    public function isSvg(): bool
+    {
+        return strtolower(pathinfo($this->name, PATHINFO_EXTENSION)) === 'svg';
     }
 
     public function getOriginalName(): string

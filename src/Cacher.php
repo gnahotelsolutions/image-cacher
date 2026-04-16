@@ -69,6 +69,10 @@ class Cacher
             $image = new Image($image, $this->imagesRootPath);
         }
 
+        if ($image->isSvg()) {
+            return $image;
+        }
+
         if ($this->originalSizeIsRequested($width, $height)) {
             return $image;
         }

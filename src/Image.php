@@ -125,7 +125,8 @@ class Image
 
     public function setOutputFormat(string $outputFormat): self
     {
-        $this->outputFormat = $outputFormat;
+        $normalized = Str::lower($outputFormat);
+        $this->outputFormat = in_array($normalized, ['jpg', 'jpeg'], true) ? Format::JPEG : $normalized;
 
         $name = explode('.', $this->name);
 

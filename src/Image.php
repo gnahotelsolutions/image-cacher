@@ -118,7 +118,9 @@ class Image
 
     public function getOutputFormat(): string
     {
-        return $this->outputFormat ?? $this->getType();
+        $format = $this->outputFormat ?? $this->getType();
+
+        return in_array(Str::lower($format), ['jpg', 'jpeg'], true) ? Format::JPEG : Str::lower($format);
     }
 
     public function setOutputFormat(string $outputFormat): self

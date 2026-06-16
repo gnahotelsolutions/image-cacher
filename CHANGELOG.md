@@ -2,6 +2,10 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+## 4.0.5
+
+- Normalize output format in setOutputFormat method to return JPEG for jpg and jpeg inputs [f6452585](https://github.com/gnahotelsolutions/image-cacher/commit/f6452585cbb5ddfa33901d59788df3e927f6153b)
+
 ## 4.0.4
 
 - Fix getOutputFormat method to return JPEG format for jpg and jpeg inputs [c2185479](https://github.com/gnahotelsolutions/image-cacher/commit/c2185479e2a25fe5be555b47d027b6f75c4afc28)

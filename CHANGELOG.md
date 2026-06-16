@@ -2,6 +2,10 @@
 
 All notable changes to `image-cacher` will be documented in this file
 
+## 4.0.4
+
+- Fix getOutputFormat method to return JPEG format for jpg and jpeg inputs [c2185479](https://github.com/gnahotelsolutions/image-cacher/commit/c2185479e2a25fe5be555b47d027b6f75c4afc28)
+
 ## 4.0.3
 
 - Add speed parameter [f30f689c](https://github.com/gnahotelsolutions/image-cacher/commit/f30f689ce087450c6ccb9b587ba4d8d6b87744d5)
